@@ -2,8 +2,27 @@
   "name": "handpicks_api",
   "version": "1.0.0",
   "description": "handpicks project API",
-  "main": "index.js",
+  "main": "server/app.js",
+  "repository": "https://github.com/gnurgeldiyev/handpicks-api.git",
   "author": "handpicks team",
   "license": "All rights reserved",
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "8.11.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/app.js",
+    "dev": "nodemon server/app.js"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.6",
+    "eslint": "^5.1.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "mongoose": "^5.2.4"
+  }
 }
