@@ -21,6 +21,7 @@ router.put('/:id', topicController.updateTopic);
 /**
  * DELETE requests
 */
+router.delete('/:id', topicController.deleteTopic);
 
 
 module.exports = router;

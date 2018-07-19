@@ -88,3 +88,20 @@ exports.updateTopic = (req, res) => {
     return res.status(400).json({ err: err.message });
   });
 }
+
+/**
+ * DELETE | delete topic by id
+*/
+exports.deleteTopic = (req, res) => {
+	const id = req.params.id;
+
+  Topic.findByIdAndRemove(id)
+  .then( (response) => {
+    if (!response) { return res.sendStatus(404); }
+
+    return res.sendStatus(204);
+  })
+  .catch( (err) => {
+    return res.status(400).json({ err: err.message });
+  });
+}
