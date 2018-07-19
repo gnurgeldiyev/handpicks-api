@@ -4,7 +4,8 @@ const topicController = require('../controllers/topicController');
 /**
  * GET requests
 */
-
+router.get('/', topicController.getAllTopics);
+router.get('/:id', topicController.getTopicById);
 
 /**
  * POST requests

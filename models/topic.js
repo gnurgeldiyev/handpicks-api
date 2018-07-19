@@ -19,6 +19,15 @@ const topicSchema = mongoose.Schema({
     }
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
 
+topicSchema.methods.topicToJson = function () {
+	return {
+			id: this._id,
+			title: this.title,
+			url: this.url,
+			description: this.description
+	};
+};
+
 const Topic = mongoose.model('Topic', topicSchema);
 
 module.exports = { Topic };
