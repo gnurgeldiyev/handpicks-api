@@ -1,6 +1,20 @@
-const {
-  User
-} = require('../models/user');
+const { User } = require('../models/user');
+
+/**
+ * GET | get user by id
+*/
+exports.getUserById = (req, res) => {
+  const id = req.params.id;
+  User.findById(id)
+  .then( (response) => {
+    if (!response) { return res.sendStatus(404); }
+    console.log(response);
+    return res.status(200).json({ user: response.toProfileJSON() });
+  })
+  .catch( (err) => {
+    return res.status(400).json({ err: err.message });
+  });
+}
 
 /**
  * POST | user sign in
