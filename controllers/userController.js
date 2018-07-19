@@ -8,8 +8,8 @@ exports.getUserById = (req, res) => {
   User.findById(id)
   .then( (response) => {
     if (!response) { return res.sendStatus(404); }
-    console.log(response);
-    return res.status(200).json({ user: response.toProfileJSON() });
+
+    return res.status(200).json({ user: response.profileToJson() });
   })
   .catch( (err) => {
     return res.status(400).json({ err: err.message });
@@ -18,7 +18,7 @@ exports.getUserById = (req, res) => {
 
 /**
  * POST | user sign in
- */
+*/
 exports.userSignIn = (req, res) => {
   const newUser = req.body.user;
 
