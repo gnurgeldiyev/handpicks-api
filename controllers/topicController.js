@@ -58,3 +58,33 @@ exports.addNewTopic = (req, res) => {
     return res.status(400).json({ err: err.message });
   });
 }
+
+/**
+ * PUT | update topic by id
+*/
+exports.updateTopic = (req, res) => {
+	const id = req.params.id;
+	const topic = req.body.topic;
+	
+	if (!topic
+    || !topic.title
+    || !topic.description) {
+    return res.sendStatus(400); 
+  }
+
+  Topic.findByIdAndUpdate(id, { 
+		$set: { 
+			title: topic.title, 
+			url: topic.title.toLowerCase().replace(' ', '-'),
+			description: topic.description
+		}
+	}, {new: true})
+  .then( (response) => {
+    if (!response) { return res.sendStatus(404); }
+
+    return res.status(200).json({ topic: response.topicToJson() });
+  })
+  .catch( (err) => {
+    return res.status(400).json({ err: err.message });
+  });
+}

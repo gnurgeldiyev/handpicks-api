@@ -16,6 +16,7 @@ router.post('/', topicController.addNewTopic);
 /**
  * PUT requests
 */
+router.put('/:id', topicController.updateTopic);
 
 /**
  * DELETE requests
