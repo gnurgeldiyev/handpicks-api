@@ -4,6 +4,26 @@ const { getHostname, getMetadata } = require('../helpers/helper');
 const { postToJson } = require('../helpers/jsonMethods');
 
 /**
+ * GET | post by post id
+*/
+exports.getPostById = (req, res) => {
+	const postId = req.params.postId;
+
+	Post.findById(postId).populate('owner').populate('topic')
+	.then((response) => {
+		if (!response) { return res.sendStatus(404); }
+		
+		let post = postToJson(response);
+		return res.status(200).json({ post });
+	})
+	.catch((err) => {
+		return res.status(500).json({
+			err: err.message
+		});
+	});
+}
+
+/**
  * POST | add a new post
 */
 exports.addNewPost = async (req, res) => {

@@ -4,7 +4,7 @@ const postController = require('../controllers/postController');
 /**
  * GET requests
 */
-
+router.get('/:postId', postController.getPostById);
 
 /**
  * POST requests
