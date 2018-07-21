@@ -12,6 +12,10 @@ router.get('/:id/links',
   linkChecks.isUserExists,
   linkController.getUserAllLinks
 );
+router.get('/:id/links/:linkId',
+  linkChecks.isUserExists,
+  linkController.getUserLinkById
+)
 
 /**
  * POST requests

@@ -39,17 +39,6 @@ linkSchema.index({
 	link_title: 1
 });
 
-linkSchema.methods.linkToJson = function () {
-  return {
-    id: this._id,
-    hostname: this.link_hostname,
-    url: this.link_url,
-    thumbnail: this.link_thumbnail,
-    title: this.link_title,
-    tags: this.tags || ''
-  };
-};
-
 const Link = mongoose.model('Link', linkSchema);
 
 module.exports = { Link } 

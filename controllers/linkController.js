@@ -1,6 +1,7 @@
 const { Link } = require('../models/link');
 const validator = require('validator');
 const { getHostname, getMetadata } = require('../helpers/helper');
+const { linkToJson } = require('../helpers/jsonMethods');
 
 /**
  * GET | user's all links
@@ -13,6 +14,26 @@ exports.getUserAllLinks = (req, res) => {
 		if (!response) { return res.sendStatus(404); }
 
 		return res.status(200).json({ links: response });
+	})
+	.catch( (err) => {
+		return res.status(500).json({
+			err: err.message
+		});
+	});
+}
+
+/**
+ * GET | user's link by link id
+*/
+exports.getUserLinkById = (req, res) => {
+	const linkId = req.params.linkId;
+
+	Link.findById(linkId).populate('owner').populate('topic')
+	.then( (response) => {
+		if (!response) { return res.sendStatus(404); }
+		
+		let link = linkToJson(response);
+		return res.status(200).json({ link });
 	})
 	.catch( (err) => {
 		return res.status(500).json({
