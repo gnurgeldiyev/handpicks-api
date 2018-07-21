@@ -9,11 +9,15 @@ const { linkToJson } = require('../helpers/jsonMethods');
 exports.getUserAllLinks = (req, res) => {
 	const userId = req.params.userId;
 
-	Link.find({ owner: userId })
+	Link.find({ owner: userId }).populate('owner').populate('topic')
 	.then( (response) => {
 		if (!response) { return res.sendStatus(404); }
-
-		return res.status(200).json({ links: response });
+		
+		let links = [];
+		response.forEach( (link) => {
+			links.push(linkToJson(link));
+		});
+		return res.status(200).json({ links });
 	})
 	.catch( (err) => {
 		return res.status(500).json({
