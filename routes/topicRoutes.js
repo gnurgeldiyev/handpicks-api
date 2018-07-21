@@ -5,7 +5,7 @@ const topicController = require('../controllers/topicController');
  * GET requests
 */
 router.get('/', topicController.getAllTopics);
-router.get('/:id', topicController.getTopicById);
+router.get('/:topicId', topicController.getTopicById);
 
 /**
  * POST requests
@@ -16,12 +16,12 @@ router.post('/', topicController.addNewTopic);
 /**
  * PUT requests
 */
-router.put('/:id', topicController.updateTopic);
+router.put('/:topicId', topicController.updateTopic);
 
 /**
  * DELETE requests
 */
-router.delete('/:id', topicController.deleteTopic);
+router.delete('/:topicId', topicController.deleteTopic);
 
 
 module.exports = router;

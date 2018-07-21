@@ -21,8 +21,8 @@ exports.getAllTopics = (req, res) => {
  * GET | get topic by id
 */
 exports.getTopicById = (req, res) => {
-  const id = req.params.id;
-  Topic.findById(id)
+  const topicId = req.params.topicId;
+  Topic.findById(topicId)
   .then( (response) => {
     if (!response) { return res.sendStatus(404); }
 
@@ -63,7 +63,7 @@ exports.addNewTopic = (req, res) => {
  * PUT | update topic by id
 */
 exports.updateTopic = (req, res) => {
-	const id = req.params.id;
+	const topicId = req.params.topicId;
 	const topic = req.body.topic;
 	
 	if (!topic
@@ -72,7 +72,7 @@ exports.updateTopic = (req, res) => {
     return res.sendStatus(400); 
   }
 
-  Topic.findByIdAndUpdate(id, { 
+  Topic.findByIdAndUpdate(topicId, { 
 		$set: { 
 			title: topic.title, 
 			url: topic.title.toLowerCase().replace(' ', '-'),
@@ -93,9 +93,9 @@ exports.updateTopic = (req, res) => {
  * DELETE | delete topic by id
 */
 exports.deleteTopic = (req, res) => {
-	const id = req.params.id;
+	const topicId = req.params.topicId;
 
-  Topic.findByIdAndRemove(id)
+  Topic.findByIdAndRemove(topicId)
   .then( (response) => {
     if (!response) { return res.sendStatus(404); }
 
