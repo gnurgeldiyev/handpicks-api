@@ -6,12 +6,12 @@ const { User } = require('../models/user');
 exports.getUserById = (req, res) => {
   const id = req.params.id;
   User.findById(id)
-  .then( (response) => {
+  .then((response) => {
     if (!response) { return res.sendStatus(404); }
 
     return res.status(200).json({ user: response.profileToJson() });
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
@@ -34,51 +34,51 @@ exports.userSignIn = (req, res) => {
   User.findOne({
       username: newUser.username
     })
-    .then((response) => {
-      if (!response) {
-        let user = new User({
-          username: newUser.username,
-          email: newUser.email,
-          name: newUser.name,
-          lastname: newUser.lastname,
-          avatar: newUser.avatar
-        });
-
-        user.save()
-          .then(() => {
-            return res.status(201).json({
-              user: user.toAuthJSON()
-            });
-          }).catch((err) => {
-            return res.status(400).json({
-              err: err.message
-            });
-          });
-      }
-
-      if (response) {
-        if (!newUser.token) {
-          return res.sendStatus(400);
-        }
-
-        response.token = newUser.token;
-        let user = response;
-
-        user.save()
-          .then(() => {
-            return res.status(200).json({
-              user: user.toAuthJSON()
-            });
-          }).catch((err) => {
-            return res.status(400).json({
-              err: err.message
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      return res.status(400).json({
-        err: err.message
+  .then((response) => {
+    if (!response) {
+      let user = new User({
+        username: newUser.username,
+        email: newUser.email,
+        name: newUser.name,
+        lastname: newUser.lastname,
+        avatar: newUser.avatar
       });
+
+      user.save()
+        .then(() => {
+          return res.status(201).json({
+            user: user.toAuthJSON()
+          });
+        }).catch((err) => {
+          return res.status(400).json({
+            err: err.message
+          });
+        });
+    }
+
+    if (response) {
+      if (!newUser.token) {
+        return res.sendStatus(400);
+      }
+
+      response.token = newUser.token;
+      let user = response;
+
+      user.save()
+        .then(() => {
+          return res.status(200).json({
+            user: user.toAuthJSON()
+          });
+        }).catch((err) => {
+          return res.status(400).json({
+            err: err.message
+          });
+        });
+    }
+  })
+  .catch((err) => {
+    return res.status(400).json({
+      err: err.message
     });
+  });
 }

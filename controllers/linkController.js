@@ -10,16 +10,16 @@ exports.getUserAllLinks = (req, res) => {
 	const userId = req.params.userId;
 
 	Link.find({ owner: userId }).populate('owner').populate('topic')
-	.then( (response) => {
+	.then((response) => {
 		if (!response) { return res.sendStatus(404); }
-		
+
 		let links = [];
-		response.forEach( (link) => {
+		response.forEach((link) => {
 			links.push(linkToJson(link));
 		});
 		return res.status(200).json({ links });
 	})
-	.catch( (err) => {
+	.catch((err) => {
 		return res.status(500).json({
 			err: err.message
 		});
@@ -33,13 +33,13 @@ exports.getUserLinkById = (req, res) => {
 	const linkId = req.params.linkId;
 
 	Link.findById(linkId).populate('owner').populate('topic')
-	.then( (response) => {
+	.then((response) => {
 		if (!response) { return res.sendStatus(404); }
 		
 		let link = linkToJson(response);
 		return res.status(200).json({ link });
 	})
-	.catch( (err) => {
+	.catch((err) => {
 		return res.status(500).json({
 			err: err.message
 		});
@@ -81,22 +81,22 @@ exports.addNewLink = async (req, res) => {
 	}
 
 	link.save()
-	.then( () => {
+	.then(() => {
 		// gets saved link with populated public infos.
 		Link.findById(link._id).populate('owner').populate('topic')
-		.then( (response) => {
+		.then ((response) => {
 			if (!response) { return res.sendStatus(404); }
 			
 			let link = linkToJson(response);
 			return res.status(200).json({ link });
 		})
-		.catch( (err) => {
+		.catch((err) => {
 			return res.status(500).json({
 				err: err.message
 			});
 		});
 	})
-	.catch( (err) => {
+	.catch((err) => {
 		return res.status(400).json({
 			err: err.message
 		});
@@ -111,13 +111,12 @@ exports.deleteLink = (req, res) => {
 	const linkId = req.params.linkId;
 
 	Link.findOneAndRemove({ _id: linkId, owner: userId })
-	.then( (response) => {
-		console.log(response);
+	.then((response) => {
 		if (!response) { return res.sendStatus(404); }
 			
 		return res.sendStatus(204);
 	})
-	.catch( (err) => {
+	.catch((err) => {
 		return res.status(400).json({
 			err: err.message
 		});

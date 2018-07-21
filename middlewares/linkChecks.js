@@ -20,13 +20,13 @@ exports.isUserIdMatch = (req, res, next) => {
 exports.isUserExists = (req, res, next) => {
   const userId = req.params.userId;
   User.findById(userId)
-  .then( (response) => {
+  .then((response) => {
     if (!response) { 
 			return res.sendStatus(404);
     }
     next();
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(500).json({
       err: err.message
     });
@@ -40,13 +40,13 @@ exports.topicCheck = (req, res, next) => {
   const newLink = req.body.link;
 
 	Topic.findById(newLink.topicId)
-  .then( (response) => {
+  .then((response) => {
 		if (!response) { 
 			return res.sendStatus(404);
     }
     next();
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(500).json({ err: err.message });
   });
 }

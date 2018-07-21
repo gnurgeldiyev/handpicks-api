@@ -22,7 +22,7 @@ exports.getHostname = (url) => {
     hostname = hostname.split(':')[0];
     //find & remove "?"
     hostname = hostname.split('?')[0];
-  } catch(err) {
+  } catch (err) {
     throw Error (err);
   }
 	return hostname;
@@ -34,7 +34,7 @@ exports.getMetadata = async (link) => {
     // scraping metadata
     const { body: html, url } = await got(link);
     metadata = await metascraper({ html, url });
-  } catch(err) {
+  } catch (err) {
     throw Error (err);
   }
   return metadata;

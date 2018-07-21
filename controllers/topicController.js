@@ -5,14 +5,14 @@ const { Topic } = require('../models/topic');
 */
 exports.getAllTopics = (req, res) => {
 	Topic.find()
-  .then( (response) => {
+  .then((response) => {
 		let topics = [];
-		response.forEach( (topic) => {
+		response.forEach((topic) => {
 			topics.push(topic.topicToJson());
 		})
     return res.status(200).json({ topics });
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
@@ -23,12 +23,12 @@ exports.getAllTopics = (req, res) => {
 exports.getTopicById = (req, res) => {
   const topicId = req.params.topicId;
   Topic.findById(topicId)
-  .then( (response) => {
+  .then((response) => {
     if (!response) { return res.sendStatus(404); }
 
     return res.status(200).json({ topic: response.topicToJson() });
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
@@ -52,9 +52,9 @@ exports.addNewTopic = (req, res) => {
   });
 
   topic.save()
-  .then( () => {
+  .then(() => {
     return res.status(201).json({ topic: topic.topicToJson() });
-  }).catch( (err) => {
+  }).catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
@@ -79,12 +79,12 @@ exports.updateTopic = (req, res) => {
 			description: topic.description
 		}
 	}, {new: true})
-  .then( (response) => {
+  .then((response) => {
     if (!response) { return res.sendStatus(404); }
 
     return res.status(200).json({ topic: response.topicToJson() });
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
@@ -96,12 +96,12 @@ exports.deleteTopic = (req, res) => {
 	const topicId = req.params.topicId;
 
   Topic.findByIdAndRemove(topicId)
-  .then( (response) => {
+  .then((response) => {
     if (!response) { return res.sendStatus(404); }
 
     return res.sendStatus(204);
   })
-  .catch( (err) => {
+  .catch((err) => {
     return res.status(400).json({ err: err.message });
   });
 }
