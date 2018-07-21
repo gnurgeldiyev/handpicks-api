@@ -22,6 +22,30 @@ exports.linkToJson = (link) => {
 }
 
 /** 
+ * returns public post info
+*/
+exports.postToJson = (post) => {
+  try {
+    const publicPost = {
+			id: post._id,
+			hostname: post.link_hostname,
+			url: post.link_url,
+			thumbnail: post.link_thumbnail,
+      title: post.link_title,
+      summary: post.summary,
+			tags: post.tags,
+			created: post.created,
+			updated: post.updated,
+			owner: profileToJson(post.owner),
+			topic: topicToJson(post.topic),
+    };
+    return publicPost;    
+  } catch (err) {
+    throw Error (err);
+  }
+}
+
+/** 
  * returns public user profile info
 */
 const profileToJson = (user) => {
