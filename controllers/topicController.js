@@ -6,6 +6,8 @@ const { Topic } = require('../models/topic');
 exports.getAllTopics = (req, res) => {
 	Topic.find()
   .then((response) => {
+    if(!response) { return res.sendStatus(404); }
+
 		let topics = [];
 		response.forEach((topic) => {
 			topics.push(topic.topicToJson());
