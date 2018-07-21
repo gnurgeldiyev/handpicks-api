@@ -5,10 +5,10 @@ const { Topic } = require('../models/topic');
  * checks matching of param user id ? body user id 
 */
 exports.isUserIdMatch = (req, res, next) => {
-  const id = req.params.id;
+  const userId = req.params.userId;
 	const newLink = req.body.link;
 
-	if (id !== newLink.ownerId) { 
+	if (userId !== newLink.ownerId) { 
 		return res.sendStatus(400);
 	}
   next();
@@ -18,8 +18,8 @@ exports.isUserIdMatch = (req, res, next) => {
  * checks is user exists
 */
 exports.isUserExists = (req, res, next) => {
-  const id = req.params.id;
-  User.findById(id)
+  const userId = req.params.userId;
+  User.findById(userId)
   .then( (response) => {
     if (!response) { 
 			return res.sendStatus(404);

@@ -7,9 +7,9 @@ const { linkToJson } = require('../helpers/jsonMethods');
  * GET | user's all links
 */
 exports.getUserAllLinks = (req, res) => {
-	const id = req.params.id;
+	const userId = req.params.userId;
 
-	Link.find({ owner: id })
+	Link.find({ owner: userId })
 	.then( (response) => {
 		if (!response) { return res.sendStatus(404); }
 
@@ -43,7 +43,7 @@ exports.getUserLinkById = (req, res) => {
 }
 
 /**
- * POST | add a new link
+ * POST | user add a new link
 */
 exports.addNewLink = async (req, res) => {
 	const newLink = req.body.link;
@@ -97,4 +97,17 @@ exports.addNewLink = async (req, res) => {
 			err: err.message
 		});
 	});
+}
+
+/**
+ * DELETE | user delete the link
+*/
+exports.deleteLink = (req, res) => {
+	const userId = req.params.userId; 
+	const linkId = req.params.linkId;
+
+	Link.findOneAndRemove({ _id: linkId, owner: userId })
+	.then( () => {
+
+	})
 }
