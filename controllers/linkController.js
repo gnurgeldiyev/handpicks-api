@@ -107,7 +107,15 @@ exports.deleteLink = (req, res) => {
 	const linkId = req.params.linkId;
 
 	Link.findOneAndRemove({ _id: linkId, owner: userId })
-	.then( () => {
-
+	.then( (response) => {
+		console.log(response);
+		if (!response) { return res.sendStatus(404); }
+			
+		return res.sendStatus(204);
 	})
+	.catch( (err) => {
+		return res.status(400).json({
+			err: err.message
+		});
+	});
 }
