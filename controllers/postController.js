@@ -4,7 +4,7 @@ const { getHostname, getMetadata } = require('../helpers/helper');
 const { postToJson } = require('../helpers/jsonMethods');
 
 /**
- * GET | post by post id
+ * GET | get post by postId
 */
 exports.getPostById = (req, res) => {
 	const postId = req.params.postId;
@@ -21,6 +21,30 @@ exports.getPostById = (req, res) => {
 			err: err.message
 		});
 	});
+}
+
+/**
+ * GET | get topic's all posts by topicId
+*/
+exports.getTopicAllPosts = (req, res) => {
+  const topicId = req.params.topicId;
+  
+  Post.find({ topic: topicId }).populate('owner').populate('topic')
+  .then((response) => {
+    console.log(response);
+    if(!response) { return res.sendStatus(404); }
+
+    let posts = [];
+    response.forEach((post) => {
+      posts.push(postToJson(post));
+    });
+    return res.status(200).json({ posts });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
 }
 
 /**

@@ -1,10 +1,15 @@
 const router = require('express').Router();
 const postController = require('../controllers/postController');
+const commonChecks = require('../middlewares/commonChecks');
 
 /**
  * GET requests
 */
 router.get('/:postId', postController.getPostById);
+router.get('/topics/:topicId', 
+  commonChecks.isTopicExistsForParams,
+  postController.getTopicAllPosts
+);
 
 /**
  * POST requests

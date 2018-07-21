@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
 const linkController = require('../controllers/linkController');
-const linkChecks = require('../middlewares/linkChecks');
+const commonChecks = require('../middlewares/commonChecks');
 
 /**
  * GET requests
@@ -9,11 +9,11 @@ const linkChecks = require('../middlewares/linkChecks');
 // router.get('/', userController.getAllUsers);
 router.get('/:userId', userController.getUserById);
 router.get('/:userId/links', 
-  linkChecks.isUserExists,
+  commonChecks.isUserExists,
   linkController.getUserAllLinks
 );
 router.get('/:userId/links/:linkId',
-  linkChecks.isUserExists,
+  commonChecks.isUserExists,
   linkController.getUserLinkById
 );
 
@@ -22,9 +22,9 @@ router.get('/:userId/links/:linkId',
 */
 router.post('/', userController.userSignIn);
 router.post('/:userId/links', 
-  linkChecks.isUserIdMatch,
-  linkChecks.isUserExists, 
-  linkChecks.topicCheck,
+  commonChecks.isUserIdMatch,
+  commonChecks.isUserExists, 
+  commonChecks.isTopicExistsForBody,
   linkController.addNewLink
 );
 
@@ -38,7 +38,7 @@ router.post('/:userId/links',
 */
 // router.delete('/:id', userController.deleteUser);
 router.delete('/:userId/links/:linkId',
-  linkChecks.isUserExists,
+  commonChecks.isUserExists,
   linkController.deleteLink
 );
 
