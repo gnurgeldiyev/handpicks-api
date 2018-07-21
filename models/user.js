@@ -89,7 +89,7 @@ userSchema.methods.profileToJson = function () {
     name: this.name,
     lastname: this.lastname,
     bio: this.bio,
-    avatar: this.avatar || ''
+    avatar: this.avatar
   };
 };
 
