@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema({
-  link_domain: {
+  link_hostname: {
     type: String,
     lowercase: true,
     required: true,
