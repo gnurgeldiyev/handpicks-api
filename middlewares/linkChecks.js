@@ -1,16 +1,24 @@
 const { User } = require('../models/user');
 const { Topic } = require('../models/topic');
 
-exports.ownerCheck = (req, res, next) => {
+/** 
+ * checks matching of param user id ? body user id 
+*/
+exports.isUserIdMatch = (req, res, next) => {
   const id = req.params.id;
 	const newLink = req.body.link;
 
-	// checks params.id with body.ownerId
 	if (id !== newLink.ownerId) { 
 		return res.sendStatus(400);
 	}
+  next();
+}
 
-	// checks is user exists
+/** 
+ * checks is user exists
+*/
+exports.isUserExists = (req, res, next) => {
+  const id = req.params.id;
   User.findById(id)
   .then( (response) => {
     if (!response) { 
@@ -25,10 +33,12 @@ exports.ownerCheck = (req, res, next) => {
   });
 }
 
+/** 
+ * checks is topic exists
+*/
 exports.topicCheck = (req, res, next) => {
   const newLink = req.body.link;
 
-  // checks is topic exists
 	Topic.findById(newLink.topicId)
   .then( (response) => {
 		if (!response) { 

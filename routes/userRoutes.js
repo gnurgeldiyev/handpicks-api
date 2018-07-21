@@ -8,13 +8,18 @@ const linkChecks = require('../middlewares/linkChecks');
 */
 // router.get('/', userController.getAllUsers);
 router.get('/:id', userController.getUserById);
+router.get('/:id/links', 
+  linkChecks.isUserExists,
+  linkController.getUserAllLinks
+);
 
 /**
  * POST requests
 */
 router.post('/', userController.userSignIn);
 router.post('/:id/links', 
-  linkChecks.ownerCheck, 
+  linkChecks.isUserIdMatch,
+  linkChecks.isUserExists, 
   linkChecks.topicCheck,
   linkController.addNewLink
 );

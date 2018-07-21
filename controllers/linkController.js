@@ -3,6 +3,25 @@ const validator = require('validator');
 const { getHostname, getMetadata } = require('../helpers/helper');
 
 /**
+ * GET | user's all links
+*/
+exports.getUserAllLinks = (req, res) => {
+	const id = req.params.id;
+
+	Link.find({ owner: id })
+	.then( (response) => {
+		if (!response) { return res.sendStatus(404); }
+
+		return res.status(200).json({ links: response });
+	})
+	.catch( (err) => {
+		return res.status(500).json({
+			err: err.message
+		});
+	});
+}
+
+/**
  * POST | add a new link
 */
 exports.addNewLink = async (req, res) => {
