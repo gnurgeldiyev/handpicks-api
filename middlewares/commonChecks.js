@@ -72,7 +72,7 @@ exports.isTopicExistsForBody = (req, res, next) => {
 }
 
 /** 
- * checks is topic exists for request params
+ * checks is post exists for request params
 */
 exports.isPostExistsForParams = (req, res, next) => {
   const postId = req.params.postId;
