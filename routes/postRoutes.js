@@ -22,7 +22,10 @@ router.post('/', postController.addNewPost);
 /**
  * PUT requests
 */
-
+router.put('/:postId',
+  commonChecks.isPostExistsForParams,
+  postController.updatePost
+);
 
 /**
  * DELETE requests

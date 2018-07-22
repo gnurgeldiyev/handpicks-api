@@ -171,3 +171,46 @@ exports.addNewPost = async (req, res) => {
 		});
 	});
 }
+
+/**
+ *	PUT | update post  
+*/
+exports.updatePost = async (req, res) => {
+	const postId = req.params.postId;
+	let post = req.body.post;
+
+	if (!post) {
+    return res.sendStatus(400);
+	}
+	if(post.summary) {
+		if (!validator.isLength(post.summary, { min: 200, max: 300 })) {
+			return res.sendStatus(422);
+		}
+	}
+
+	const oldPost = await Post.findById(postId);
+
+	Post.findByIdAndUpdate(postId, { 
+		$set: { 
+			topic: post.topic ? post.topic : oldPost.topic, 
+			summary: post.summary ? validator.ltrim(post.summary) : oldPost.summary,
+			tags: post.tags ? post.tags : oldPost.tags
+		}
+	}, {new: true})
+  .then((response) => {
+		// gets saved link with populated public infos.
+		Post.findById(response._id).populate('owner').populate('topic')
+		.then ((response) => {			
+			let post = postToJson(response);
+			return res.status(200).json({ post });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
+  })
+  .catch((err) => {
+    return res.status(400).json({ err: err.message });
+  });
+}
