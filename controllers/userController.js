@@ -4,11 +4,10 @@ const { User } = require('../models/user');
  * GET | get user by id
 */
 exports.getUserById = (req, res) => {
-  const id = req.params.id;
-  User.findById(id)
+  const userId = req.params.userId;
+  
+  User.findById(userId)
   .then((response) => {
-    if (!response) { return res.sendStatus(404); }
-
     return res.status(200).json({ user: response.profileToJson() });
   })
   .catch((err) => {
