@@ -1,4 +1,5 @@
 const { Topic } = require('../models/topic');
+const validator = require('validator');
 
 /**
  * GET | get all topics
@@ -24,10 +25,9 @@ exports.getAllTopics = (req, res) => {
 */
 exports.getTopicById = (req, res) => {
   const topicId = req.params.topicId;
+  
   Topic.findById(topicId)
   .then((response) => {
-    if (!response) { return res.sendStatus(404); }
-
     return res.status(200).json({ topic: response.topicToJson() });
   })
   .catch((err) => {
@@ -43,7 +43,8 @@ exports.addNewTopic = (req, res) => {
 
   if (!newTopic
     || !newTopic.title
-    || !newTopic.description) {
+    || !newTopic.description
+    || !validator.isLength(newTopic.summary, { min: 1, max: 100 })) {
     return res.sendStatus(400);
   }
 
@@ -67,23 +68,22 @@ exports.addNewTopic = (req, res) => {
 exports.updateTopic = (req, res) => {
 	const topicId = req.params.topicId;
 	const topic = req.body.topic;
-	
-	if (!topic
+  
+  if (!topic
     || !topic.title
-    || !topic.description) {
-    return res.sendStatus(400); 
+    || !topic.description
+    || !validator.isLength(topic.description, { min: 1, max: 100 })) {
+    return res.sendStatus(400);
   }
 
   Topic.findByIdAndUpdate(topicId, { 
 		$set: { 
-			title: topic.title, 
-			url: topic.title.toLowerCase().replace(' ', '-'),
-			description: topic.description
+			title: validator.ltrim(topic.title), 
+			url: validator.ltrim(topic.title.toLowerCase().replace(' ', '-')),
+			description: validator.ltrim(topic.description)
 		}
 	}, {new: true})
   .then((response) => {
-    if (!response) { return res.sendStatus(404); }
-
     return res.status(200).json({ topic: response.topicToJson() });
   })
   .catch((err) => {
@@ -98,9 +98,7 @@ exports.deleteTopic = (req, res) => {
 	const topicId = req.params.topicId;
 
   Topic.findByIdAndRemove(topicId)
-  .then((response) => {
-    if (!response) { return res.sendStatus(404); }
-
+  .then(() => {
     return res.sendStatus(204);
   })
   .catch((err) => {
