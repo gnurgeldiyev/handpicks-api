@@ -62,23 +62,55 @@ exports.getPostById = (req, res) => {
  * GET | get topic's all posts by topicId
 */
 exports.getTopicAllPosts = (req, res) => {
-  const topicId = req.params.topicId;
-  
-  Post.find({ topic: topicId }).populate('owner').populate('topic')
-  .then((response) => {
-    if(!response) { return res.sendStatus(404); }
+	let date = req.query.date;
+	const topicId = req.params.topicId;
+	// all posts with certain topicId
+	if (!date) {
+		Post.find({ topic: topicId }).populate('owner').populate('topic')
+		.then((response) => {
+			if(!response) { return res.sendStatus(404); }
 
-    let posts = [];
-    response.forEach((post) => {
-      posts.push(postToJson(post));
-    });
-    return res.status(200).json({ posts });
-  })
-  .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
-  });
+			let posts = [];
+			response.forEach((post) => {
+				posts.push(postToJson(post));
+			});
+			return res.status(200).json({ posts });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
+	} else { // all posts with certain topicId and queried created date
+		if (!validator.isISO8601(date)) {
+			return res.sendStatus(400);
+		}
+		
+		date = validator.toDate(date);
+		let dayAfter = new Date(date);
+		dayAfter.setDate(dayAfter.getDate() + 1);
+	
+		Post.find({
+			topic: topicId,
+			created: {
+			'$gte': date, 
+			'$lt': dayAfter
+		}}).populate('owner').populate('topic')
+		.then((response) => {
+			if(!response) { return res.sendStatus(404); }
+	
+			let posts = [];
+			response.forEach((post) => {
+				posts.push(postToJson(post));
+			});
+			return res.status(200).json({ posts });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
+	}	
 }
 
 /**
