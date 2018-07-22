@@ -1,5 +1,6 @@
 const { User } = require('../models/user');
 const { Topic } = require('../models/topic');
+const { Post } = require('../models/post');
 
 /** 
  * checks matching of param user id ? body user id 
@@ -67,5 +68,24 @@ exports.isTopicExistsForBody = (req, res, next) => {
   })
   .catch((err) => {
     return res.status(500).json({ err: err.message });
+  });
+}
+
+/** 
+ * checks is topic exists for request params
+*/
+exports.isPostExistsForParams = (req, res, next) => {
+  const postId = req.params.postId;
+  Post.findById(postId)
+  .then((response) => {
+    if (!response) { 
+			return res.sendStatus(404);
+    }
+    next();
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
   });
 }
