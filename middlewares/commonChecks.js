@@ -7,7 +7,12 @@ const { Post } = require('../models/post');
 */
 exports.isUserIdMatch = (req, res, next) => {
   const userId = req.params.userId;
-	const newLink = req.body.link;
+  const newLink = req.body.link;
+  
+  if (!userId
+    || !newLink) {
+    return res.sendStatus(400);
+  }
 
 	if (userId !== newLink.ownerId) { 
 		return res.sendStatus(400);
@@ -20,6 +25,10 @@ exports.isUserIdMatch = (req, res, next) => {
 */
 exports.isUserExists = (req, res, next) => {
   const userId = req.params.userId;
+  if (!userId) {
+    return res.sendStatus(400);
+  }
+
   User.findById(userId)
   .then((response) => {
     if (!response) { 
@@ -39,6 +48,10 @@ exports.isUserExists = (req, res, next) => {
 */
 exports.isTopicExistsForParams = (req, res, next) => {
   const topicId = req.params.topicId;
+  if (!topicId) {
+    return res.sendStatus(400);
+  }
+
   Topic.findById(topicId)
   .then((response) => {
     if (!response) { 
@@ -58,6 +71,9 @@ exports.isTopicExistsForParams = (req, res, next) => {
 */
 exports.isTopicExistsForBody = (req, res, next) => {
   const newLink = req.body.link;
+  if (!newLink) {
+    return res.sendStatus(400);
+  }
 
 	Topic.findById(newLink.topicId)
   .then((response) => {
@@ -76,6 +92,10 @@ exports.isTopicExistsForBody = (req, res, next) => {
 */
 exports.isPostExistsForParams = (req, res, next) => {
   const postId = req.params.postId;
+  if (!postId) {
+    return res.sendStatus(400);
+  }
+
   Post.findById(postId)
   .then((response) => {
     if (!response) { 
