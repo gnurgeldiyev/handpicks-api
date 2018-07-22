@@ -47,6 +47,30 @@ exports.getUserLinkById = (req, res) => {
 }
 
 /**
+ * GET | user's links by topic
+*/
+exports.getUserLinksByTopic = (req, res) => {
+	const userId = req.params.userId;
+	const topicId = req.params.topicId;
+
+	Link.find({ owner: userId, topic: topicId }).populate('owner').populate('topic')
+	.then((response) => {
+		if (!response) { return res.sendStatus(404); }
+
+		let links = [];
+		response.forEach((link) => {
+			links.push(linkToJson(link));
+		});
+		return res.status(200).json({ links });
+	})
+	.catch((err) => {
+		return res.status(500).json({
+			err: err.message
+		});
+	});
+}
+
+/**
  * POST | user add a new link
 */
 exports.addNewLink = async (req, res) => {
