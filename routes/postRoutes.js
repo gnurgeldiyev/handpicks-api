@@ -30,7 +30,10 @@ router.put('/:postId',
 /**
  * DELETE requests
 */
-
+router.delete('/:postId', 
+  commonChecks.isPostExistsForParams,
+  postController.deletePost
+);  
 
 
 module.exports = router;

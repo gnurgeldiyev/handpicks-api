@@ -214,3 +214,18 @@ exports.updatePost = async (req, res) => {
     return res.status(400).json({ err: err.message });
   });
 }
+
+/** 
+ * DELETE | delete post
+*/
+exports.deletePost = (req, res) => {
+	const postId = req.params.postId;
+
+  Post.findByIdAndRemove(postId)
+  .then(() => {
+    return res.sendStatus(204);
+  })
+  .catch((err) => {
+    return res.status(400).json({ err: err.message });
+  });
+}
