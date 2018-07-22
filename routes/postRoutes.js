@@ -5,11 +5,13 @@ const commonChecks = require('../middlewares/commonChecks');
 /**
  * GET requests
 */
+router.get('/', postController.getPostsByQuery);
 router.get('/:postId', postController.getPostById);
 router.get('/topics/:topicId', 
   commonChecks.isTopicExistsForParams,
   postController.getTopicAllPosts
 );
+
 
 /**
  * POST requests

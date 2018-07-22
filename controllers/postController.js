@@ -4,6 +4,41 @@ const { getHostname, getMetadata } = require('../helpers/helper');
 const { postToJson } = require('../helpers/jsonMethods');
 
 /**
+ * GET | get posts by query 
+ * query date
+*/
+exports.getPostsByQuery = (req, res) => {
+	let date = req.query.date;
+
+	if (!date
+		|| !validator.isISO8601(date)) {
+		return res.sendStatus(400);
+	}
+	date = validator.toDate(date);
+	let dayAfter = new Date(date);
+	dayAfter.setDate(dayAfter.getDate() + 1);
+
+	Post.find({ created: {
+		'$gte': date, 
+		'$lt': dayAfter
+	}}).populate('owner').populate('topic')
+	.then((response) => {
+    if(!response) { return res.sendStatus(404); }
+
+    let posts = [];
+    response.forEach((post) => {
+      posts.push(postToJson(post));
+    });
+    return res.status(200).json({ posts });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
+
+/**
  * GET | get post by postId
 */
 exports.getPostById = (req, res) => {
@@ -31,7 +66,6 @@ exports.getTopicAllPosts = (req, res) => {
   
   Post.find({ topic: topicId }).populate('owner').populate('topic')
   .then((response) => {
-    console.log(response);
     if(!response) { return res.sendStatus(404); }
 
     let posts = [];
