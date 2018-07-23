@@ -70,3 +70,21 @@ const topicToJson = (topic) => {
 		description: topic.description
   };
 }
+
+/** 
+ * returns public topicFollow data with populated info
+*/
+exports.topicFollowToJson = (topicFollow) => {
+  try {
+    const publicTopicFollow = {
+      id: topicFollow._id,
+      follower: profileToJson(topicFollow.follower),
+      followee: topicToJson(topicFollow.followee),
+      created: topicFollow.created,
+      updated: topicFollow.updated
+    }
+    return publicTopicFollow; 
+  } catch (err) {
+    throw Error (err);
+  }
+}
