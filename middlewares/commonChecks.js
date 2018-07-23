@@ -5,7 +5,7 @@ const { Post } = require('../models/post');
 /** 
  * checks is user exists
 */
-exports.isUserExists = (req, res, next) => {
+exports.isUserExistsForParams = (req, res, next) => {
   const userId = req.params.userId;
   if (!userId) {
     return res.sendStatus(400);
