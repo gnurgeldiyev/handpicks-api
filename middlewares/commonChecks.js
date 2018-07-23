@@ -3,24 +3,6 @@ const { Topic } = require('../models/topic');
 const { Post } = require('../models/post');
 
 /** 
- * checks matching of param user id ? body user id 
-*/
-exports.isUserIdMatch = (req, res, next) => {
-  const userId = req.params.userId;
-  const newLink = req.body.link;
-  
-  if (!userId
-    || !newLink) {
-    return res.sendStatus(400);
-  }
-
-	if (userId !== newLink.ownerId) { 
-		return res.sendStatus(400);
-	}
-  next();
-}
-
-/** 
  * checks is user exists
 */
 exports.isUserExists = (req, res, next) => {

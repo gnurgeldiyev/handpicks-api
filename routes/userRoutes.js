@@ -30,7 +30,6 @@ router.get('/:userId/links/topics/:topicId',
 */
 router.post('/', userController.userSignIn);
 router.post('/:userId/links', 
-  commonChecks.isUserIdMatch,
   commonChecks.isUserExists, 
   commonChecks.isTopicExistsForBody,
   linkController.addNewLink

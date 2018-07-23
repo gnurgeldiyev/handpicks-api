@@ -74,14 +74,13 @@ exports.getUserLinksByTopic = (req, res) => {
  * POST | user add a new link
 */
 exports.addNewLink = async (req, res) => {
-	const newLink = req.body.link;
-	
+	let newLink = req.body.link;
+	newLink.ownerId = req.params.userId;
+
 	// validates incoming data
 	if (!newLink
-		|| !newLink.url
 		|| !validator.isURL(newLink.url)
-		|| !newLink.topicId
-		|| !newLink.ownerId) {
+		|| !newLink.topicId) {
 		res.sendStatus(400);
 	}
 	
