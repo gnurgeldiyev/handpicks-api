@@ -18,6 +18,55 @@ exports.getUserById = (req, res) => {
 }
 
 /**
+ * GET | user follow or unfollow the topic
+*/
+exports.topicFollowUnfollow = (req, res) => {
+  const userId = req.params.userId;
+  const topicId = req.params.topicId;
+
+  TopicFollow.findOne({ follower: userId, followee: topicId })
+  .then((response) => {
+    if (!response) { // follow the topic
+      let topicFollow = new TopicFollow({
+        follower: userId,
+        followee: topicId
+      });
+    
+      topicFollow.save()
+      .then((response) => {
+        TopicFollow.findById(response._id).populate('follower').populate('followee')
+        .then((response) => {
+          const topicFollow = topicFollowToJson(response);
+          return res.status(200).json({ topicFollow });
+        })
+        .catch((err) => {
+          return res.status(500).json({
+            err: err.message
+          });
+        });
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          err: err.message
+        });
+      });
+    } else { // unfollow the topic
+      TopicFollow.findOneAndRemove({ follower: userId, followee: topicId })
+      .then(() => {
+        return res.sendStatus(204);
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          err: err.message
+        });
+      });
+    }
+  })
+
+  
+}
+
+/**
  * POST | user sign in
 */
 exports.userSignIn = (req, res) => {
@@ -85,28 +134,19 @@ exports.userSignIn = (req, res) => {
 }
 
 /**
- * POST | user follow the topic
+ * DELETE | user unfollow the topic
 */
-exports.followTopic = (req, res) => {
+exports.unfollowTopic = (req, res) => {
   const userId = req.params.userId;
   const topicId = req.params.topicId;
 
-  let topicFollow = new TopicFollow({
-    follower: userId,
-    followee: topicId
-  });
-
-  topicFollow.save()
-  .then((response) => {
-    TopicFollow.findById(response._id).populate('follower').populate('followee')
-    .then((response) => {
-      const topicFollow = topicFollowToJson(response);
-      return res.status(200).json({ topicFollow });
-    })
-    .catch((err) => {
-      return res.status(500).json({
-        err: err.message
-      });
-    });
+  TopicFollow.findOneAndRemove({ follower: userId, followee: topicId})
+  .then(() => {
+    return res.sendStatus(204);
   })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
 }

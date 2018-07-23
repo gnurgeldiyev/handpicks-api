@@ -24,6 +24,11 @@ router.get('/:userId/links/topics/:topicId',
   commonChecks.isTopicExistsForParams,
   linkController.getUserLinksByTopic
 );
+router.get('/:userId/topics/:topicId',
+  commonChecks.isUserExistsForParams,
+  commonChecks.isTopicExistsForParams,
+  userController.topicFollowUnfollow  
+);
 
 /**
  * POST requests
@@ -33,11 +38,6 @@ router.post('/:userId/links',
   commonChecks.isUserExistsForParams, 
   commonChecks.isTopicExistsForBody,
   linkController.addNewLink
-);
-router.post('/:userId/topics/:topicId',
-  commonChecks.isUserExistsForParams,
-  commonChecks.isTopicExistsForParams,
-  userController.followTopic  
 );
 
 /**
