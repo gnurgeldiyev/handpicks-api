@@ -8,19 +8,19 @@ const commonChecks = require('../middlewares/commonChecks');
 */
 // router.get('/', userController.getAllUsers);
 router.get('/:userId', 
-  commonChecks.isUserExists,
+  commonChecks.isUserExistsForParams,
   userController.getUserById
 );
 router.get('/:userId/links', 
-  commonChecks.isUserExists,
+  commonChecks.isUserExistsForParams,
   linkController.getUserAllLinks
 );
 router.get('/:userId/links/:linkId',
-  commonChecks.isUserExists,
+  commonChecks.isUserExistsForParams,
   linkController.getUserLinkById
 );
 router.get('/:userId/links/topics/:topicId',
-  commonChecks.isUserExists,
+  commonChecks.isUserExistsForParams,
   commonChecks.isTopicExistsForParams,
   linkController.getUserLinksByTopic
 );
@@ -30,9 +30,14 @@ router.get('/:userId/links/topics/:topicId',
 */
 router.post('/', userController.userSignIn);
 router.post('/:userId/links', 
-  commonChecks.isUserExists, 
+  commonChecks.isUserExistsForParams, 
   commonChecks.isTopicExistsForBody,
   linkController.addNewLink
+);
+router.post('/:userId/topics/:topicId',
+  commonChecks.isUserExistsForParams,
+  commonChecks.isTopicExistsForParams,
+  userController.followTopic  
 );
 
 /**
@@ -45,7 +50,7 @@ router.post('/:userId/links',
 */
 // router.delete('/:id', userController.deleteUser);
 router.delete('/:userId/links/:linkId',
-  commonChecks.isUserExists,
+  commonChecks.isUserExistsForParams,
   linkController.deleteLink
 );
 

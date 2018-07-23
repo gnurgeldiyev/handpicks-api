@@ -1,4 +1,6 @@
 const { User } = require('../models/user');
+const { TopicFollow } = require('../models/topicFollow');
+const { topicFollowToJson } = require('../helpers/jsonMethods');
 
 /**
  * GET | get user by id
@@ -80,4 +82,31 @@ exports.userSignIn = (req, res) => {
       err: err.message
     });
   });
+}
+
+/**
+ * POST | user follow the topic
+*/
+exports.followTopic = (req, res) => {
+  const userId = req.params.userId;
+  const topicId = req.params.topicId;
+
+  let topicFollow = new TopicFollow({
+    follower: userId,
+    followee: topicId
+  });
+
+  topicFollow.save()
+  .then((response) => {
+    TopicFollow.findById(response._id).populate('follower').populate('followee')
+    .then((response) => {
+      const topicFollow = topicFollowToJson(response);
+      return res.status(200).json({ topicFollow });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        err: err.message
+      });
+    });
+  })
 }
