@@ -43,7 +43,10 @@ router.post('/:userId/links',
 /**
  * PUT requests
 */
-// router.put('/:id', userController.updateUser);
+router.put('/:userId', 
+  commonChecks.isUserExistsForParams,
+  userController.updateUser
+);
 
 /**
  * DELETE requests

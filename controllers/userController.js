@@ -134,18 +134,40 @@ exports.userSignIn = (req, res) => {
 }
 
 /**
- * DELETE | user unfollow the topic
+ * POST | user update profile
 */
-exports.unfollowTopic = (req, res) => {
+exports.updateUser = async (req, res) => {
   const userId = req.params.userId;
-  const topicId = req.params.topicId;
+  const user = req.body.user;
 
-  TopicFollow.findOneAndRemove({ follower: userId, followee: topicId})
-  .then(() => {
-    return res.sendStatus(204);
+  if (!user) {
+    return res.sendStatus(400);
+  }
+  
+  const oldUser = await User.findById(userId);
+
+  User.findByIdAndUpdate(userId, {
+    $set: {
+      username: user.username ? user.username : oldUser.username,
+      name: user.name ? user.name : oldUser.name,
+      lastname: user.lastname ? user.lastname : oldUser.lastname,
+      avatar: user.avatar ? user.avatar : oldUser.avatar,
+    }
+  }, {new: true})
+  .then((response) => {
+    // get updated user
+		User.findById(response._id)
+		.then ((response) => {			
+			return res.status(200).json({ user: response.profileToJson() });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
   })
   .catch((err) => {
-    return res.status(500).json({
+    return res.status(422).json({
       err: err.message
     });
   });
