@@ -211,7 +211,7 @@ exports.updatePost = async (req, res) => {
 		});
   })
   .catch((err) => {
-    return res.status(500).json({ err: err.message });
+    return res.status(422).json({ err: err.message });
   });
 }
 
