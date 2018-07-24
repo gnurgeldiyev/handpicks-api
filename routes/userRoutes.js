@@ -34,6 +34,10 @@ router.get('/:userId/topics/:topicId',
  * POST requests
 */
 router.post('/', userController.userSignIn);
+router.post('/:userId/logout',
+  commonChecks.isUserExistsForParams,
+  userController.userLogout
+);
 router.post('/:userId/links', 
   commonChecks.isUserExistsForParams, 
   commonChecks.isTopicExistsForBody,

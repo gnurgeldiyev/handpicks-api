@@ -133,6 +133,34 @@ exports.userSignIn = (req, res) => {
 }
 
 /**
+ * POST | user logout
+*/
+exports.userLogout = (req, res) => {
+  const userId = req.params.userId;
+  const user = req.body.user;
+
+  User.findOneAndUpdate({
+    _id: userId,
+    token: user.token
+  }, {
+    $set: {
+      token: null
+    }
+  }, { new: true })
+  .then((response) => {
+    if (!response) {
+      return res.status(400).json({ err: "User token does not match with stored token."});
+    }
+    return res.sendStatus(204);
+  })
+  .catch((err) => {
+    return res.status(422).json({
+      err: err.message
+    });
+  });
+}
+
+/**
  * PUT | user update profile
 */
 exports.updateUser = async (req, res) => {
@@ -152,7 +180,7 @@ exports.updateUser = async (req, res) => {
       lastname: user.lastname ? user.lastname : oldUser.lastname,
       avatar: user.avatar ? user.avatar : oldUser.avatar,
     }
-  }, {new: true})
+  }, { new: true })
   .then((response) => {
     // get updated user
 		User.findById(response._id)
