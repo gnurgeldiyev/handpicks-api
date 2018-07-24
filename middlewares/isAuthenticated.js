@@ -7,11 +7,15 @@ firebaseAdmin.initializeApp({
 });
 
 exports.isAuthenticated = (req, res, next) => {
-  const idToken = req.body.credit.idToken;
   const user = req.body.user;
 
+  if (!user
+    || !user.token) {
+    return res.sendStatus(422);
+  }
+
   // verify idToken comes from the client
-  firebaseAdmin.auth().verifyIdToken(idToken)
+  firebaseAdmin.auth().verifyIdToken(user.token)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
 
