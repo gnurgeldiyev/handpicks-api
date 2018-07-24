@@ -40,6 +40,10 @@ const userSchema = mongoose.Schema({
     type: String,
     lowercase: true,
     default: 'user'
+  },
+  token: {
+    type: String,
+    default: null
   }
 }, {
   timestamps: {

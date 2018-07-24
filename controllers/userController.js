@@ -73,12 +73,13 @@ exports.topicFollowUnfollow = (req, res) => {
 exports.userSignIn = (req, res) => {
   const newUser = req.body.user;
 
-  if (!newUser ||
-    !newUser.username ||
-    !newUser.email ||
-    !newUser.name ||
-    !newUser.lastname ||
-    !newUser.avatar) {
+  if (!newUser 
+    || !newUser.username 
+    || !newUser.email 
+    || !newUser.name 
+    || !newUser.lastname 
+    || !newUser.avatar
+    || !newUser.token) {
     return res.sendStatus(400);
   }
 
@@ -92,7 +93,8 @@ exports.userSignIn = (req, res) => {
         email: newUser.email,
         name: newUser.name,
         lastname: newUser.lastname,
-        avatar: newUser.avatar
+        avatar: newUser.avatar,
+        token: newUser.token
       });
 
       user.save()
@@ -108,10 +110,6 @@ exports.userSignIn = (req, res) => {
     }
 
     if (response) {
-      if (!newUser.token) {
-        return res.sendStatus(400);
-      }
-
       response.token = newUser.token;
       let user = response;
 
