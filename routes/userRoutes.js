@@ -51,7 +51,10 @@ router.put('/:userId',
 /**
  * DELETE requests
 */
-// router.delete('/:id', userController.deleteUser);
+router.delete('/:userId', 
+  commonChecks.isUserExistsForParams,
+  userController.deleteUser
+);
 router.delete('/:userId/links/:linkId',
   commonChecks.isUserExistsForParams,
   linkController.deleteLink

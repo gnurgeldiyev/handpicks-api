@@ -1,4 +1,5 @@
 const { User } = require('../models/user');
+const { Link } = require('../models/link');
 const { TopicFollow } = require('../models/topicFollow');
 const { topicFollowToJson } = require('../helpers/jsonMethods');
 
@@ -82,8 +83,8 @@ exports.userSignIn = (req, res) => {
   }
 
   User.findOne({
-      username: newUser.username
-    })
+    username: newUser.username
+  })
   .then((response) => {
     if (!response) {
       let user = new User({
@@ -97,7 +98,7 @@ exports.userSignIn = (req, res) => {
       user.save()
         .then(() => {
           return res.status(201).json({
-            user: user.toAuthJSON()
+            user: user.profileToJson()
           });
         }).catch((err) => {
           return res.status(400).json({
@@ -117,7 +118,7 @@ exports.userSignIn = (req, res) => {
       user.save()
         .then(() => {
           return res.status(200).json({
-            user: user.toAuthJSON()
+            user: user.profileToJson()
           });
         }).catch((err) => {
           return res.status(400).json({
@@ -134,7 +135,7 @@ exports.userSignIn = (req, res) => {
 }
 
 /**
- * POST | user update profile
+ * PUT | user update profile
 */
 exports.updateUser = async (req, res) => {
   const userId = req.params.userId;
@@ -172,3 +173,36 @@ exports.updateUser = async (req, res) => {
     });
   });
 }
+
+/**
+ * DELETE | delete user and delete all other user data (links, follows etc.)
+*/
+exports.deleteUser = (req, res) => {
+  const userId = req.params.userId;
+
+  TopicFollow.findOneAndRemove({ follower: userId })
+  .then(() => {
+    Link.findOneAndRemove({ owner: userId })
+    .then(() => {
+      User.findByIdAndRemove(userId)
+      .then(() => {
+        return res.sendStatus(204);
+      })
+      .catch((err) => {
+        return res.status(500).json({
+          err: err.message
+        });
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        err: err.message
+      });
+    });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+} 
