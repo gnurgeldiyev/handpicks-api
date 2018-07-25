@@ -4,6 +4,8 @@ const metascraper = require('metascraper').load([
 	require('metascraper-title')(),
 	require('metascraper-url')()
 ]);
+const jwt = require('jsonwebtoken');
+const secret = process.env.PASSWORD_SALT || 'SUPERP@SSWORD!';
 
 /**
  * Function | gets url hostname
@@ -28,6 +30,9 @@ exports.getHostname = (url) => {
 	return hostname;
 }
 
+/**
+ * Function | gets link's metadata(s)
+*/
 exports.getMetadata = async (link) => {
   let metadata = {};
   try {
@@ -38,4 +43,21 @@ exports.getMetadata = async (link) => {
     throw Error (err);
   }
   return metadata;
+}
+
+/**
+ * Function | hashes password (HMAC SHA256)
+*/
+exports.hashPassword = function (password) {
+  return jwt.sign({ password: password }, secret);
+}
+
+/**
+ * Function | unhashes hashed password (HMAC SHA256)
+*/
+exports.unhashPassword = function (hashedPassword) {
+  jwt.verify(hashedPassword, secret, function (err, decoded) {
+    if (err) { return false; }
+    return decoded;
+  });
 }
