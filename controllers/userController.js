@@ -175,10 +175,10 @@ exports.updateUser = async (req, res) => {
 
   User.findByIdAndUpdate(userId, {
     $set: {
-      username: user.username ? user.username : oldUser.username,
-      name: user.name ? user.name : oldUser.name,
-      lastname: user.lastname ? user.lastname : oldUser.lastname,
-      avatar: user.avatar ? user.avatar : oldUser.avatar,
+      username: user.username || oldUser.username,
+      name: user.name || oldUser.name,
+      lastname: user.lastname || oldUser.lastname,
+      avatar: user.avatar || oldUser.avatar,
     }
   }, { new: true })
   .then((response) => {
