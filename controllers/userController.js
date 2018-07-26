@@ -81,7 +81,7 @@ exports.getUserPosts = async (req, res) => {
   .catch((err) => { 
     return res.status(500).json({ err: err.message }) 
   });
-
+  // return 404, if there is no any followed topics.
   if (followedTopics.length === 0) {
     return res.sendStatus(404);
   }
