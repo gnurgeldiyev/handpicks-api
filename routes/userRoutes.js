@@ -29,6 +29,10 @@ router.get('/:userId/topics/:topicId',
   commonChecks.isTopicExistsForParams,
   userController.topicFollowUnfollow  
 );
+router.get('/:userId/posts',
+  commonChecks.isUserExistsForParams,
+  userController.getUserPosts
+);
 
 /**
  * POST requests

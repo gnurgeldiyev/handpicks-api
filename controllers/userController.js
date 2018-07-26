@@ -1,7 +1,8 @@
 const { User } = require('../models/user');
 const { Link } = require('../models/link');
+const { Post } = require('../models/post');
 const { TopicFollow } = require('../models/topicFollow');
-const { topicFollowToJson } = require('../helpers/jsonMethods');
+const { topicFollowToJson, postToJson } = require('../helpers/jsonMethods');
 
 /**
  * GET | get user by id
@@ -63,8 +64,48 @@ exports.topicFollowUnfollow = (req, res) => {
       });
     }
   })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
 
-  
+/**
+ * GET | user posts based on followed topics
+*/
+exports.getUserPosts = async (req, res) => {
+  const userId = req.params.userId;
+
+  const followedTopics = await TopicFollow.find({ follower: userId }).select({ _id: 0, followee: 1 })
+  .catch((err) => { 
+    return res.status(500).json({ err: err.message }) 
+  });
+
+  if (followedTopics.length === 0) {
+    return res.sendStatus(404);
+  }
+  // getting topicId(s) in single Array
+  let topicIds = [];
+  followedTopics.forEach(topic => {
+    topicIds.push(topic.followee);
+  });
+
+  Post.find({ topic: { $in: topicIds }}).populate('owner').populate('topic').sort({ created: -1})
+  .then((response) => {
+    if (!response) { return res.sendStatus(404); }
+
+    let posts = [];
+    response.forEach((post) => {
+      posts.push(postToJson(post));
+    });
+    return res.status(200).json({ posts });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
 }
 
 /**
