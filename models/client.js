@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const secret = process.env.SECRET || 'SUPERP@SSWORD!';
-// mongoose.set('debug', true);
+const secret = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
 
 const clientSchema = mongoose.Schema({
 	name: {
