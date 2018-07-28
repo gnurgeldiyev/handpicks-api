@@ -10,7 +10,7 @@ const managerController = require('../controllers/managerController');
  * POST requests
 */
 router.post('/', managerController.addNewManager);
-
+router.post('/login', managerController.login);
 
 /**
  * PUT requests
