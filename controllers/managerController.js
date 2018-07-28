@@ -49,6 +49,25 @@ exports.getAllEditors = (req, res) => {
 }
 
 /** 
+ * GET | get manager by username
+*/
+exports.getManagerByUsername = (req, res) => {
+  const username = req.params.username;
+
+  Manager.findOne({ username })
+  .then((response) => {
+    if (!response) {
+      return res.sendStatus(404);
+    }
+
+    return res.status(200).json({ manager: response.profileToJson() });
+  })
+  .catch((err) => {
+    return res.status(500).json({ err: err.message });
+  })
+}
+
+/** 
  * POST | add a new manager
 */
 exports.addNewManager = (req, res) => {

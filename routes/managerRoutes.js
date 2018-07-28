@@ -6,6 +6,7 @@ const managerController = require('../controllers/managerController');
 */
 router.get('/', managerController.getAllManagers);
 router.get('/editors', managerController.getAllEditors);
+router.get('/:username', managerController.getManagerByUsername);
 
 /**
  * POST requests
