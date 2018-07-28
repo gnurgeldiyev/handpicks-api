@@ -1,5 +1,6 @@
 const { Manager } = require('../models/manager');
 const { hashPassword, unhashPassword } = require('../helpers/helper');
+const validator = require('validator');
 
 /** 
  * GET | get all managers
@@ -17,6 +18,34 @@ exports.getAllManagers = (req, res) => {
     });
     return res.status(200).json({ managers });
   })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
+
+/** 
+ * GET | get only editors
+*/
+exports.getAllEditors = (req, res) => {
+  Manager.find({ role: 'editor' })
+  .then((response) => {
+    if (!response) {
+      return res.sendStatus(404);
+    }
+
+    let editors = [];
+    response.forEach((editor) => {
+      editors.push(editor.profileToJson());
+    });
+    return res.status(200).json({ editors });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
 }
 
 /** 
@@ -26,10 +55,12 @@ exports.addNewManager = (req, res) => {
   const newManager = req.body.manager;
 
   if (!newManager 
-    || !newManager.email 
+    || !newManager.email
+    || !validator.isEmail(newManager.email) 
     || !newManager.name 
     || !newManager.lastname 
-    || !newManager.password) {
+    || !newManager.password
+    || !validator.isLength(newManager.password, { min:6 })) {
     return res.sendStatus(400);
   }
 
@@ -46,7 +77,8 @@ exports.addNewManager = (req, res) => {
     return res.status(201).json({
       manager: manager.profileToJson()
     });
-  }).catch((err) => {
+  })
+  .catch((err) => {
     return res.status(500).json({
       err: err.message
     });

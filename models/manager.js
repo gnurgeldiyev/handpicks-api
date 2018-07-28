@@ -18,7 +18,7 @@ const managerSchema = mongoose.Schema({
     match: [/\S+@\S+\.\S+/, 'is invalid']
   },
   password: {
-    type: String,
+    type: String, 
     required: [true, "can't be blank"]
   },
   name: {
