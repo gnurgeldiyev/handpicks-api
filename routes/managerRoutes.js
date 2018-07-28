@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const managerController = require('../controllers/managerController');
-const { isManagerExistsForParams } = require('../middlewares/commonChecks');
+const clientController = require('../controllers/clientController');
+const { isManagerExistsForParams, isAdminForParams } = require('../middlewares/commonChecks');
 
 /**
  * GET requests
@@ -17,6 +18,11 @@ router.get('/:managerId',
 */
 router.post('/', managerController.addNewManager);
 router.post('/login', managerController.login);
+router.post('/:managerId/clients', 
+  isManagerExistsForParams,
+  isAdminForParams,
+  clientController.addNewClient
+);
 
 /**
  * PUT requests
@@ -31,6 +37,7 @@ router.put('/:managerId',
 */
 router.delete('/:managerId', 
   isManagerExistsForParams,
+  isAdminForParams,
   managerController.deleteManager
 );
 
