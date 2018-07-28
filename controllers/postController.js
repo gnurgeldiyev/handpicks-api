@@ -1,5 +1,5 @@
 const { Post } = require('../models/post');
-const validator = require('validator');
+const { isISO8601, toDate, isURL, isLength, ltrim } = require('validator');
 const { getHostname, getMetadata } = require('../helpers/helper');
 const { postToJson } = require('../helpers/jsonMethods');
 
@@ -11,10 +11,10 @@ exports.getPostsByQuery = (req, res) => {
 	let date = req.query.date;
 
 	if (!date
-		|| !validator.isISO8601(date)) {
+		|| !isISO8601(date)) {
 		return res.sendStatus(400);
 	}
-	date = validator.toDate(date);
+	date = toDate(date);
 	let dayAfter = new Date(date);
 	dayAfter.setDate(dayAfter.getDate() + 1);
 
@@ -82,11 +82,11 @@ exports.getTopicAllPosts = (req, res) => {
 			});
 		});
 	} else { // all posts with certain topicId and queried created date
-		if (!validator.isISO8601(date)) {
+		if (!isISO8601(date)) {
 			return res.sendStatus(400);
 		}
 		
-		date = validator.toDate(date);
+		date = toDate(date);
 		let dayAfter = new Date(date);
 		dayAfter.setDate(dayAfter.getDate() + 1);
 	
@@ -120,10 +120,10 @@ exports.addNewPost = async (req, res) => {
   const newPost = req.body.post;
 
   if (!newPost
-    || !validator.isURL(newPost.url)
+    || !isURL(newPost.url)
     || !newPost.ownerId
     || !newPost.topicId
-    || !validator.isLength(newPost.summary, { min: 200, max: 300 })
+    || !isLength(newPost.summary, { min: 200, max: 300 })
     || !newPost.tags) {
     return res.sendStatus(400);
   }
@@ -137,8 +137,8 @@ exports.addNewPost = async (req, res) => {
 			link_hostname: getHostname(metadata.url),
 			link_url: metadata.url,
 			link_thumbnail: metadata.image,
-      link_title: validator.ltrim(metadata.title),
-      summary: validator.ltrim(newPost.summary),
+      link_title: ltrim(metadata.title),
+      summary: ltrim(newPost.summary),
 			owner: newPost.ownerId,
       topic: newPost.topicId,
       tags: newPost.tags
@@ -183,7 +183,7 @@ exports.updatePost = async (req, res) => {
     return res.sendStatus(400);
 	}
 	if(post.summary) {
-		if (!validator.isLength(post.summary, { min: 200, max: 300 })) {
+		if (!isLength(post.summary, { min: 200, max: 300 })) {
 			return res.sendStatus(422);
 		}
 	}
@@ -196,7 +196,7 @@ exports.updatePost = async (req, res) => {
 	Post.findByIdAndUpdate(postId, { 
 		$set: { 
 			topic: post.topic ? post.topic : oldPost.topic, 
-			summary: post.summary ? validator.ltrim(post.summary) : oldPost.summary,
+			summary: post.summary ? ltrim(post.summary) : oldPost.summary,
 			tags: post.tags ? post.tags : oldPost.tags
 		}
 	}, {new: true})

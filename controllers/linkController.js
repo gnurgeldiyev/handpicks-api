@@ -1,5 +1,5 @@
 const { Link } = require('../models/link');
-const validator = require('validator');
+const { isURL, ltrim } = require('validator');
 const { getHostname, getMetadata } = require('../helpers/helper');
 const { linkToJson } = require('../helpers/jsonMethods');
 
@@ -79,7 +79,7 @@ exports.addNewLink = async (req, res) => {
 
 	// validates incoming data
 	if (!newLink
-		|| !validator.isURL(newLink.url)
+		|| !isURL(newLink.url)
 		|| !newLink.topicId) {
 		res.sendStatus(400);
 	}
@@ -93,7 +93,7 @@ exports.addNewLink = async (req, res) => {
 			link_hostname: getHostname(metadata.url),
 			link_url: metadata.url,
 			link_thumbnail: metadata.image,
-			link_title: validator.ltrim(metadata.title),
+			link_title: ltrim(metadata.title),
 			owner: newLink.ownerId,
 			topic: newLink.topicId
 		});

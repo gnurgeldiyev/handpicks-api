@@ -1,5 +1,5 @@
 const { Topic } = require('../models/topic');
-const validator = require('validator');
+const { isLength, ltrim } = require('validator');
 
 /**
  * GET | get all topics
@@ -44,7 +44,7 @@ exports.addNewTopic = (req, res) => {
   if (!newTopic
     || !newTopic.title
     || !newTopic.description
-    || !validator.isLength(newTopic.summary, { min: 1, max: 100 })) {
+    || !isLength(newTopic.summary, { min: 1, max: 100 })) {
     return res.sendStatus(400);
   }
 
@@ -72,15 +72,15 @@ exports.updateTopic = (req, res) => {
   if (!topic
     || !topic.title
     || !topic.description
-    || !validator.isLength(topic.description, { min: 1, max: 100 })) {
+    || !isLength(topic.description, { min: 1, max: 100 })) {
     return res.sendStatus(400);
   }
 
   Topic.findByIdAndUpdate(topicId, { 
 		$set: { 
-			title: validator.ltrim(topic.title), 
-			url: validator.ltrim(topic.title.toLowerCase().replace(' ', '-')),
-			description: validator.ltrim(topic.description)
+			title: ltrim(topic.title), 
+			url: ltrim(topic.title.toLowerCase().replace(' ', '-')),
+			description: ltrim(topic.description)
 		}
 	}, {new: true})
   .then((response) => {

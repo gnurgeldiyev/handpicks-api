@@ -3,7 +3,7 @@ const { Link } = require('../models/link');
 const { Post } = require('../models/post');
 const { TopicFollow } = require('../models/topicFollow');
 const { topicFollowToJson, postToJson } = require('../helpers/jsonMethods');
-const validator = require('validator');
+const { isEmail } = require('validator');
 
 /**
  * GET | get user by id
@@ -118,7 +118,7 @@ exports.userSignIn = (req, res) => {
   if (!newUser 
     || !newUser.username 
     || !newUser.email
-    || !validator.isEmail(newUser.email)
+    || !isEmail(newUser.email)
     || !newUser.name 
     || !newUser.lastname 
     || !newUser.avatar

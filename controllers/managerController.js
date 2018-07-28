@@ -1,6 +1,6 @@
 const { Manager } = require('../models/manager');
 const { hashPassword, unhashPassword } = require('../helpers/helper');
-const validator = require('validator');
+const { isEmail, isLength } = require('validator');
 
 /** 
  * GET | get all managers
@@ -71,11 +71,11 @@ exports.addNewManager = (req, res) => {
 
   if (!newManager 
     || !newManager.email
-    || !validator.isEmail(newManager.email) 
+    || !isEmail(newManager.email) 
     || !newManager.name 
     || !newManager.lastname 
     || !newManager.password
-    || !validator.isLength(newManager.password, { min:6 })) {
+    || !isLength(newManager.password, { min:6 })) {
     return res.sendStatus(400);
   }
 
@@ -140,12 +140,12 @@ exports.updateManager = async (req, res) => {
     return res.sendStatus(400);
   }
   if (manager.email) {
-    if (!validator.isEmail(manager.email)) {
+    if (!isEmail(manager.email)) {
       return res.sendStatus(422);
     }
   }
   if (manager.password) {
-    if (!validator.isLength(manager.password, { min:6 })) {
+    if (!isLength(manager.password, { min:6 })) {
       return res.sendStatus(422);
     }
   }

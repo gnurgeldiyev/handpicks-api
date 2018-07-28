@@ -2,13 +2,15 @@ const { User } = require('../models/user');
 const { Topic } = require('../models/topic');
 const { Post } = require('../models/post');
 const { Manager } = require('../models/manager');
+const { isMongoId } = require('validator');
 
 /** 
  * checks is user exists
 */
 exports.isUserExistsForParams = (req, res, next) => {
   const userId = req.params.userId;
-  if (!userId) {
+  if (!userId 
+    || isMongoId(userId)) {
     return res.sendStatus(400);
   }
 
@@ -31,7 +33,8 @@ exports.isUserExistsForParams = (req, res, next) => {
 */
 exports.isTopicExistsForParams = (req, res, next) => {
   const topicId = req.params.topicId;
-  if (!topicId) {
+  if (!topicId
+    || isMongoId(topicId)) {
     return res.sendStatus(400);
   }
 
@@ -75,7 +78,8 @@ exports.isTopicExistsForBody = (req, res, next) => {
 */
 exports.isPostExistsForParams = (req, res, next) => {
   const postId = req.params.postId;
-  if (!postId) {
+  if (!postId
+    || isMongoId(postId)) {
     return res.sendStatus(400);
   }
 
@@ -98,7 +102,8 @@ exports.isPostExistsForParams = (req, res, next) => {
 */
 exports.isManagerExistsForParams = (req, res, next) => {
   const managerId = req.params.managerId;
-  if (!managerId) {
+  if (!managerId
+    || isMongoId(managerId)) {
     return res.sendStatus(400);
   }
 
