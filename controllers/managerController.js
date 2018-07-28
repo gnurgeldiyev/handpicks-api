@@ -52,14 +52,10 @@ exports.getAllEditors = (req, res) => {
  * GET | get manager by username
 */
 exports.getManagerByUsername = (req, res) => {
-  const username = req.params.username;
+  const managerId = req.params.managerId;
 
-  Manager.findOne({ username })
+  Manager.findById(managerId)
   .then((response) => {
-    if (!response) {
-      return res.sendStatus(404);
-    }
-
     return res.status(200).json({ manager: response.profileToJson() });
   })
   .catch((err) => {
@@ -128,6 +124,62 @@ exports.login = (req, res) => {
     }
     return res.sendStatus(401);
   })
+  .catch((err) => {
+    return res.status(500).json({ err: err.message });
+  })
+}
+
+/** 
+ * PUT | update the manager
+*/
+exports.updateManager = async (req, res) => {
+  const managerId = req.params.managerId;
+  const manager = req.body.manager;
+
+  if (!manager) {
+    return res.sendStatus(400);
+  }
+  if (manager.email) {
+    if (!validator.isEmail(manager.email)) {
+      return res.sendStatus(422);
+    }
+  }
+  if (manager.password) {
+    if (!validator.isLength(manager.password, { min:6 })) {
+      return res.sendStatus(422);
+    }
+  }
+
+  const oldManager = await Manager.findById(managerId);
+
+  Manager.findOneAndUpdate(managerId, {
+    $set: {
+      email: manager.email || oldManager.email,
+      username: manager.username || oldManager.username,
+      name: manager.name || oldManager.name,
+      lastname: manager.lastname || oldManager.lastname,
+      role: manager.role || oldManager.role,
+      password: manager.password ? hashPassword(manager.password) : oldManager.password
+    }
+  }, { new: true })
+  .then((response) => {
+    return res.status(200).json({ manager: response.profileToJson() });
+  })
+  .catch((err) => {
+    return res.status(500).json({ err: err.message });
+  });
+}
+
+/** 
+ * DELETE | delete the manager
+*/
+exports.deleteManager = (req, res) => {
+  const managerId = req.params.managerId;
+
+  Manager.findByIdAndRemove(managerId)
+  .then(() => {
+    return res.sendStatus(204);
+  }) 
   .catch((err) => {
     return res.status(500).json({ err: err.message });
   })
