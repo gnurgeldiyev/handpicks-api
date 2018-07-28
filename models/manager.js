@@ -51,7 +51,8 @@ managerSchema.methods.profileToJson = function () {
     username: this.username,
     name: this.name,
     lastname: this.lastname,
-    role: this.role
+    role: this.role,
+    created: this.created
   };
 };
 
