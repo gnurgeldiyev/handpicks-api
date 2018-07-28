@@ -33,8 +33,10 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// client name and apiKey check
+app.use(isValidClient);
+
 // Import Routes
-app.get('/*', isValidClient);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/topics', topicRoutes);
 app.use('/api/v1/posts', postRoutes);
