@@ -4,7 +4,7 @@ const managerController = require('../controllers/managerController');
 /**
  * GET requests
 */
-
+router.get('/', managerController.getAllManagers);
 
 /**
  * POST requests

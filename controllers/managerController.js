@@ -2,6 +2,24 @@ const { Manager } = require('../models/manager');
 const { hashPassword, unhashPassword } = require('../helpers/helper');
 
 /** 
+ * GET | get all managers
+*/
+exports.getAllManagers = (req, res) => {
+  Manager.find().sort({ role: 1 })
+  .then((response) => {
+    if (!response) {
+      return res.sendStatus(404);
+    }
+
+    let managers = [];
+    response.forEach((manager) => {
+      managers.push(manager.profileToJson());
+    });
+    return res.status(200).json({ managers });
+  })
+}
+
+/** 
  * POST | add a new manager
 */
 exports.addNewManager = (req, res) => {
