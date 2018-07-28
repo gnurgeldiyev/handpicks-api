@@ -68,11 +68,15 @@ exports.getClientConfig = function (authorizationHeader) {
     name = authorizationHeader.split(',')[0];
     apiKey = authorizationHeader.split(',')[1];
 
+    if (!name
+      || !apiKey) {
+      return false;
+    }
     name = name.split('=')[1].trim();
     apiKey = apiKey.split('=')[1].trim();
 
   } catch (err) {
-    throw Error (err);
+    return false;
   }
 
   return {

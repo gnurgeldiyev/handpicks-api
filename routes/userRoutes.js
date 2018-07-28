@@ -7,7 +7,7 @@ const { isUserExistsForParams, isTopicExistsForParams, isTopicExistsForBody } = 
  * GET requests
 */
 // router.get('/', userController.getAllUsers);
-router.get('/:userId', 
+router.get('/:userId',
   isUserExistsForParams,
   userController.getUserById
 );

@@ -9,6 +9,9 @@ const { getClientConfig, unhashClientName } = require('../helpers/helper');
  * checks client API Key
 */
 exports.isValidClient = (req, res, next) => {
+  if (!getClientConfig(req.get('authorization'))) {
+    return res.sendStatus(401);
+  }
   const client = getClientConfig(req.get('authorization'));
   const name = unhashClientName(client.name).private_name;
 
