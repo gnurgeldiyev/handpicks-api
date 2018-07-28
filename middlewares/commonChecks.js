@@ -1,6 +1,7 @@
 const { User } = require('../models/user');
 const { Topic } = require('../models/topic');
 const { Post } = require('../models/post');
+const { Manager } = require('../models/manager');
 
 /** 
  * checks is user exists
@@ -79,6 +80,29 @@ exports.isPostExistsForParams = (req, res, next) => {
   }
 
   Post.findById(postId)
+  .then((response) => {
+    if (!response) { 
+			return res.sendStatus(404);
+    }
+    next();
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
+
+/** 
+ * checks is manager exists for request params
+*/
+exports.isManagerExistsForParams = (req, res, next) => {
+  const username = req.params.username;
+  if (!username) {
+    return res.sendStatus(400);
+  }
+
+  Manager.findOne({ username })
   .then((response) => {
     if (!response) { 
 			return res.sendStatus(404);
