@@ -150,7 +150,10 @@ exports.updateManager = async (req, res) => {
     }
   }
 
-  const oldManager = await Manager.findById(managerId);
+  const oldManager = await Manager.findById(managerId)
+  .catch((err) => { 
+    return res.status(500).json({ err: err.message }) 
+  });
 
   Manager.findOneAndUpdate(managerId, {
     $set: {

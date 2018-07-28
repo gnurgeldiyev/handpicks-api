@@ -141,15 +141,16 @@ exports.userSignIn = (req, res) => {
       });
 
       user.save()
-        .then(() => {
-          return res.status(201).json({
-            user: user.profileToJson()
-          });
-        }).catch((err) => {
-          return res.status(400).json({
-            err: err.message
-          });
+      .then(() => {
+        return res.status(201).json({
+          user: user.profileToJson()
         });
+      })
+      .catch((err) => {
+        return res.status(400).json({
+          err: err.message
+        });
+      });
     }
 
     if (response) {
@@ -157,15 +158,16 @@ exports.userSignIn = (req, res) => {
       let user = response;
 
       user.save()
-        .then(() => {
-          return res.status(200).json({
-            user: user.profileToJson()
-          });
-        }).catch((err) => {
-          return res.status(400).json({
-            err: err.message
-          });
+      .then(() => {
+        return res.status(200).json({
+          user: user.profileToJson()
         });
+      })
+      .catch((err) => {
+        return res.status(400).json({
+          err: err.message
+        });
+      });
     }
   })
   .catch((err) => {
@@ -214,7 +216,10 @@ exports.updateUser = async (req, res) => {
     return res.sendStatus(400);
   }
   
-  const oldUser = await User.findById(userId);
+  const oldUser = await User.findById(userId)
+  .catch((err) => { 
+    return res.status(500).json({ err: err.message }) 
+  });
 
   User.findByIdAndUpdate(userId, {
     $set: {

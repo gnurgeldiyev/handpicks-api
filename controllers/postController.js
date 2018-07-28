@@ -188,7 +188,10 @@ exports.updatePost = async (req, res) => {
 		}
 	}
 
-	const oldPost = await Post.findById(postId);
+	const oldPost = await Post.findById(postId)
+	.catch((err) => { 
+    return res.status(500).json({ err: err.message }) 
+  });
 
 	Post.findByIdAndUpdate(postId, { 
 		$set: { 

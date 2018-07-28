@@ -16,7 +16,6 @@ router.get('/:topicId',
 */
 router.post('/', topicController.addNewTopic);
 
-
 /**
  * PUT requests
 */
@@ -32,6 +31,5 @@ router.delete('/:topicId',
   isTopicExistsForParams,
   topicController.deleteTopic
 );
-
 
 module.exports = router;

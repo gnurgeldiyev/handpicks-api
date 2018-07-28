@@ -12,12 +12,10 @@ router.get('/topics/:topicId',
   postController.getTopicAllPosts
 );
 
-
 /**
  * POST requests
 */
 router.post('/', postController.addNewPost);
-
 
 /**
  * PUT requests
@@ -34,6 +32,5 @@ router.delete('/:postId',
   isPostExistsForParams,
   postController.deletePost
 );  
-
 
 module.exports = router;

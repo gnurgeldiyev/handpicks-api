@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const secret = process.env.SECRET || 'SUPERP@SSWORD!';
 
 const userSchema = mongoose.Schema({
   username: {
@@ -55,36 +53,6 @@ const userSchema = mongoose.Schema({
 userSchema.index({
   username: 1
 });
-
-userSchema.methods.generateJWT = function () {
-  const today = new Date();
-  const exp = new Date(today);
-  exp.setDate(today.getDate() + 365);
-
-  return jwt.sign({
-    id: this._id,
-    username: this.username,
-    exp: parseInt(exp.getTime() / 1000, 10),
-  }, secret);
-};
-
-userSchema.methods.verifyJWT = function (token) {
-  jwt.verify(token, secret, function (err, decoded) {
-    if (err) { return false; }
-    return decoded;
-  });
-}
-
-userSchema.methods.toAuthJSON = function () {
-  return {
-    username: this.username,
-    name: this.name,
-    lastname: this.lastname,
-    token: this.generateJWT(),
-    bio: this.bio,
-    avatar: this.avatar
-  };
-};
 
 userSchema.methods.profileToJson = function () {
   return {
