@@ -3,6 +3,33 @@ const { Topic } = require('../models/topic');
 const { Post } = require('../models/post');
 const { Manager } = require('../models/manager');
 const { Client } = require('../models/client');
+const { getClientConfig, unhashClientName } = require('../helpers/helper');
+
+/** 
+ * checks client API Key
+*/
+exports.isValidClient = (req, res, next) => {
+  const client = getClientConfig(req.get('authorization'));
+  const name = unhashClientName(client.name).private_name;
+
+  Client.findOne({ private_name: name, 'api_key': client.apiKey })
+  .then((response) => {
+    if (!response) {
+      return res.sendStatus(401);
+    }
+
+    const decodedApiKey = response.verifyApiKey(client.apiKey).id;
+    if (response._id.toString() !== decodedApiKey) {
+      return res.sendStatus(401);
+    }
+    next();
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
 
 /** 
  * checks is user exists
