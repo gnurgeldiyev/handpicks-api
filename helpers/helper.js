@@ -5,7 +5,8 @@ const metascraper = require('metascraper').load([
 	require('metascraper-url')()
 ]);
 const jwt = require('jsonwebtoken');
-const secret = process.env.PASSWORD_SALT || 'SUPERP@SSWORD!';
+const passwordSalt = process.env.PASSWORD_SALT || 'SUPERP@SSWORD!';
+const apiKeySalt = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
 
 /**
  * Function | gets url hostname
@@ -49,13 +50,48 @@ exports.getMetadata = async (link) => {
  * Function | hashes password (HMAC SHA256)
 */
 exports.hashPassword = function (password) {
-  return jwt.sign({ password: password }, secret);
+  return jwt.sign({ password: password }, passwordSalt);
 }
 
 /**
  * Function | unhashes hashed password (HMAC SHA256)
 */
 exports.unhashPassword = function (hashedPassword) {
-  const decoded = jwt.verify(hashedPassword, secret);
+  const decoded = jwt.verify(hashedPassword, passwordSalt);
+  return decoded;
+}
+
+
+exports.getClientConfig = function (authorizationHeader) {
+  let name, apiKey;
+  try {
+    name = authorizationHeader.split(',')[0];
+    apiKey = authorizationHeader.split(',')[1];
+
+    name = name.split('=')[1].trim();
+    apiKey = apiKey.split('=')[1].trim();
+
+  } catch (err) {
+    throw Error (err);
+  }
+
+  return {
+    name,
+    apiKey
+  };
+}
+
+/**
+ * Function | hashes password (HMAC SHA256)
+*/
+exports.hashClientName = function (name) {
+  return jwt.sign({ private_name: name }, apiKeySalt);
+}
+
+/**
+ * Function | unhashes hashed password (HMAC SHA256)
+*/
+exports.unhashClientName = function (hashedName) {
+  const decoded = jwt.verify(hashedName, apiKeySalt);
   return decoded;
 }
