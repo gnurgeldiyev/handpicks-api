@@ -1,5 +1,6 @@
 const firebaseAdmin = require('firebase-admin');
-const serviceAccount = require("../config/handpicks-test-firebase-adminsdk-2wp2c-b0d441f993.json");
+const serviceAccount = require('../config/handpicks-test-firebase-adminsdk-2wp2c-b0d441f993.json');
+const { getAuthToken } = require('../helpers/helper');
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
@@ -7,21 +8,21 @@ firebaseAdmin.initializeApp({
 });
 
 exports.isAuthenticated = (req, res, next) => {
-  const user = req.body.user;
+  
+  const token = getAuthToken(req.get('authorization'));
 
-  if (!user
-    || !user.token) {
-    return res.sendStatus(422);
+  if (!token) {
+    return res.sendStatus(401);
   }
 
   // verify idToken comes from the client
-  firebaseAdmin.auth().verifyIdToken(user.token)
+  firebaseAdmin.auth().verifyIdToken(token)
   .then((decodedToken) => {
     const uid = decodedToken.uid;
 
     firebaseAdmin.auth().getUser(uid)
     .then((response) => {
-      if (response.email === user.email) { next(); }
+      if (response) { next(); }
 
       return res.sendStatus(401);
     })

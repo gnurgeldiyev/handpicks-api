@@ -45,7 +45,7 @@ exports.getClientById = (req, res) => {
 */
 exports.addNewClient = (req, res) => {
   const newClient = req.body.client;
-  console.log(newClient);
+
   if (!newClient
     || !newClient.name) {
     return res.sendStatus(400);   

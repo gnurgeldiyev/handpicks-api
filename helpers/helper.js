@@ -26,7 +26,7 @@ exports.getHostname = (url) => {
     //find & remove "?"
     hostname = hostname.split('?')[0];
   } catch (err) {
-    throw Error (err);
+    return false;
   }
 	return hostname;
 }
@@ -41,7 +41,7 @@ exports.getMetadata = async (link) => {
     const { body: html, url } = await got(link);
     metadata = await metascraper({ html, url });
   } catch (err) {
-    throw Error (err);
+    return false;
   }
   return metadata;
 }
@@ -50,18 +50,28 @@ exports.getMetadata = async (link) => {
  * Function | hashes password (HMAC SHA256)
 */
 exports.hashPassword = function (password) {
-  return jwt.sign({ password: password }, passwordSalt);
+  try {
+    return jwt.sign({ password: password }, passwordSalt);
+  } catch (err) {
+    return false;
+  }
 }
 
 /**
  * Function | unhashes hashed password (HMAC SHA256)
 */
 exports.unhashPassword = function (hashedPassword) {
-  const decoded = jwt.verify(hashedPassword, passwordSalt);
-  return decoded;
+  try {
+    const decoded = jwt.verify(hashedPassword, passwordSalt);
+    return decoded;
+  } catch (err) {
+    return false;
+  }
 }
 
-
+/**
+ * Function | gets client name and apiKey from request Authorization header.
+*/
 exports.getClientConfig = function (authorizationHeader) {
   let name, apiKey;
   try {
@@ -89,13 +99,41 @@ exports.getClientConfig = function (authorizationHeader) {
  * Function | hashes password (HMAC SHA256)
 */
 exports.hashClientName = function (name) {
-  return jwt.sign({ private_name: name }, apiKeySalt);
+  try {
+    return jwt.sign({ private_name: name }, apiKeySalt);
+  } catch (err) {
+    return false;
+  } 
 }
 
 /**
  * Function | unhashes hashed password (HMAC SHA256)
 */
 exports.unhashClientName = function (hashedName) {
-  const decoded = jwt.verify(hashedName, apiKeySalt);
-  return decoded;
+  try {
+    const decoded = jwt.verify(hashedName, apiKeySalt);
+    return decoded;
+  } catch (err) {
+    return false;
+  }
+}
+
+/**
+ * Function | gets auth token from request Authorization header.
+*/
+exports.getAuthToken = function (authorizationHeader) {
+  let token;
+  try {
+    token = authorizationHeader.split(',')[2];
+
+    if (!token) {
+      return false;
+    }
+    token = token.split('=')[1].trim();
+
+  } catch (err) {
+    return false;
+  }
+
+  return token;
 }
