@@ -22,7 +22,12 @@ mongoose.connection.on('error', (err) => {
   console.log(`MongoDB connection is failed → ${err.message}`); 
 });
 
-app.use(cors());
+app.use(cors({  
+  origin: '*',
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
