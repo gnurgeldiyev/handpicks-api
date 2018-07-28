@@ -56,8 +56,6 @@ exports.hashPassword = function (password) {
  * Function | unhashes hashed password (HMAC SHA256)
 */
 exports.unhashPassword = function (hashedPassword) {
-  jwt.verify(hashedPassword, secret, function (err, decoded) {
-    if (err) { return false; }
-    return decoded;
-  });
+  const decoded = jwt.verify(hashedPassword, secret);
+  return decoded;
 }
