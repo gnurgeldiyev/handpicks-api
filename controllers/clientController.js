@@ -1,4 +1,5 @@
 const { Client } = require('../models/client');
+const { hashClientName } = require('../helpers/helper');
 
 /** 
  * GET | get all clients
@@ -51,12 +52,13 @@ exports.addNewClient = (req, res) => {
   }
 
   let client = new Client({
-    name: newClient.name
+    private_name: newClient.name,
+    public_name: hashClientName(newClient.name)
   });
 
   client.save()
   .then((response) => {
-    Client.findOneAndUpdate({ name: response.name }, {
+    Client.findOneAndUpdate({ private_name: response.private_name }, {
       $set: {
         api_key: response.generateApiKey()
       }
@@ -91,7 +93,8 @@ exports.updateClient = (req, res) => {
 
   Client.findByIdAndUpdate(clientId, {
     $set: {
-      name: client.name
+      private_name: client.name,
+      public_name: hashClientName(client.name)
     }
   }, { new: true })
   .then((response) => {

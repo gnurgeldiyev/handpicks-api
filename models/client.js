@@ -1,9 +1,14 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const secret = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
+const apiKeySalt = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
 
 const clientSchema = mongoose.Schema({
-	name: {
+	private_name: {
+		type: String,
+		required: true,
+		unique: true
+  },
+  public_name: {
 		type: String,
 		required: true,
 		unique: true
@@ -16,20 +21,18 @@ const clientSchema = mongoose.Schema({
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
 
 clientSchema.methods.generateApiKey = function() {
-  return jwt.sign({ id: this._id }, secret);
+  return jwt.sign({ id: this._id }, apiKeySalt);
 }
 
 clientSchema.methods.verifyApiKey = function (apiKey) {
-  jwt.verify(apiKey, secret, function (err, decoded) {
-    if (err) { return false; }
-    return decoded;
-  });
+  const decoded = jwt.verify(apiKey, apiKeySalt);
+  return decoded;
 }
 
 clientSchema.methods.clientToJson = function () {
   return {
     id: this._id,
-    name: this.name,
+    name: this.public_name,
     apiKey: this.api_key,
     created: this.created
   };
