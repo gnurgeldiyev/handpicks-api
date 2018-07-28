@@ -37,3 +37,30 @@ exports.addNewClient = (req, res) => {
     });
   });
 }
+
+/** 
+ * PUT | update the client
+*/
+exports.updateClient = (req, res) => {
+  const clientId = req.params.clientId;
+  const client = req.body.client;
+
+  if (!client
+    || !client.name) {
+    return res.sendStatus(400);
+  }
+
+  Client.findByIdAndUpdate(clientId, {
+    $set: {
+      name: client.name
+    }
+  }, { new: true })
+  .then((response) => {
+    return res.status(200).json({ client: response.clientToJson() });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
