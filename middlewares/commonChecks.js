@@ -135,3 +135,26 @@ exports.isAdminForParams = (req, res, next) => {
     });
   })
 }
+
+/** 
+ * checks is client exists
+*/
+exports.isClientExistsForParams = (req, res, next) => {
+  const clientId = req.params.clientId;
+  if (!clientId) {
+    return res.sendStatus(400);
+  }
+
+  Manager.findById(clientId)
+  .then((response) => {
+    if (!response) { 
+			return res.sendStatus(404);
+    }
+    next();
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
