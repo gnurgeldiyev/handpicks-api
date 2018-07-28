@@ -12,6 +12,17 @@ router.get('/:managerId',
   isManagerExistsForParams,
   managerController.getManagerByUsername
 );
+router.get('/:managerId/clients', 
+  isManagerExistsForParams,
+  isAdminForParams,
+  clientController.getAllClients
+);
+router.get('/:managerId/clients/:clientId', 
+  isManagerExistsForParams,
+  isAdminForParams,
+  isClientExistsForParams,
+  clientController.getClientById
+);
 
 /**
  * POST requests
@@ -45,6 +56,12 @@ router.delete('/:managerId',
   isManagerExistsForParams,
   isAdminForParams,
   managerController.deleteManager
+);
+router.delete('/:managerId/clients/:clientId', 
+  isManagerExistsForParams,
+  isAdminForParams,
+  isClientExistsForParams,
+  clientController.deleteClient
 );
 
 module.exports = router;
