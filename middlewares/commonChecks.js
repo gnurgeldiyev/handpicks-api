@@ -2,6 +2,7 @@ const { User } = require('../models/user');
 const { Topic } = require('../models/topic');
 const { Post } = require('../models/post');
 const { Manager } = require('../models/manager');
+const { Client } = require('../models/client');
 
 /** 
  * checks is user exists
@@ -145,7 +146,7 @@ exports.isClientExistsForParams = (req, res, next) => {
     return res.sendStatus(400);
   }
 
-  Manager.findById(clientId)
+  Client.findById(clientId)
   .then((response) => {
     if (!response) { 
 			return res.sendStatus(404);
