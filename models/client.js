@@ -26,6 +26,15 @@ clientSchema.methods.verifyApiKey = function (apiKey) {
   });
 }
 
+clientSchema.methods.clientToJson = function () {
+  return {
+    id: this._id,
+    name: this.name,
+    apiKey: this.api_key,
+    created: this.created
+  };
+};
+
 const Client = mongoose.model('Client', clientSchema);
 
 module.exports = { Client };
