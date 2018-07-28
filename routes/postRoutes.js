@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const postController = require('../controllers/postController');
-const commonChecks = require('../middlewares/commonChecks');
+const { isTopicExistsForParams, isPostExistsForParams } = require('../middlewares/commonChecks');
 
 /**
  * GET requests
@@ -8,7 +8,7 @@ const commonChecks = require('../middlewares/commonChecks');
 router.get('/', postController.getPostsByQuery);
 router.get('/:postId', postController.getPostById);
 router.get('/topics/:topicId', 
-  commonChecks.isTopicExistsForParams,
+  isTopicExistsForParams,
   postController.getTopicAllPosts
 );
 
@@ -23,7 +23,7 @@ router.post('/', postController.addNewPost);
  * PUT requests
 */
 router.put('/:postId',
-  commonChecks.isPostExistsForParams,
+  isPostExistsForParams,
   postController.updatePost
 );
 
@@ -31,7 +31,7 @@ router.put('/:postId',
  * DELETE requests
 */
 router.delete('/:postId', 
-  commonChecks.isPostExistsForParams,
+  isPostExistsForParams,
   postController.deletePost
 );  
 

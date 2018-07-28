@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const topicController = require('../controllers/topicController');
-const commonChecks = require('../middlewares/commonChecks');
+const { isTopicExistsForParams } = require('../middlewares/commonChecks');
 
 /**
  * GET requests
 */
 router.get('/', topicController.getAllTopics);
 router.get('/:topicId', 
-  commonChecks.isTopicExistsForParams,
+  isTopicExistsForParams,
   topicController.getTopicById
 );
 
@@ -21,7 +21,7 @@ router.post('/', topicController.addNewTopic);
  * PUT requests
 */
 router.put('/:topicId',
-  commonChecks.isTopicExistsForParams,
+  isTopicExistsForParams,
   topicController.updateTopic
 );
 
@@ -29,7 +29,7 @@ router.put('/:topicId',
  * DELETE requests
 */
 router.delete('/:topicId', 
-  commonChecks.isTopicExistsForParams,
+  isTopicExistsForParams,
   topicController.deleteTopic
 );
 

@@ -1,36 +1,36 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
 const linkController = require('../controllers/linkController');
-const commonChecks = require('../middlewares/commonChecks');
+const { isUserExistsForParams, isTopicExistsForParams, isTopicExistsForBody } = require('../middlewares/commonChecks');
 
 /**
  * GET requests
 */
 // router.get('/', userController.getAllUsers);
 router.get('/:userId', 
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   userController.getUserById
 );
 router.get('/:userId/links', 
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   linkController.getUserAllLinks
 );
 router.get('/:userId/links/:linkId',
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   linkController.getUserLinkById
 );
 router.get('/:userId/links/topics/:topicId',
-  commonChecks.isUserExistsForParams,
-  commonChecks.isTopicExistsForParams,
+  isUserExistsForParams,
+  isTopicExistsForParams,
   linkController.getUserLinksByTopic
 );
 router.get('/:userId/topics/:topicId',
-  commonChecks.isUserExistsForParams,
-  commonChecks.isTopicExistsForParams,
+  isUserExistsForParams,
+  isTopicExistsForParams,
   userController.topicFollowUnfollow  
 );
 router.get('/:userId/posts',
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   userController.getUserPosts
 );
 
@@ -39,12 +39,12 @@ router.get('/:userId/posts',
 */
 router.post('/', userController.userSignIn);
 router.post('/:userId/logout',
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   userController.userLogout
 );
 router.post('/:userId/links', 
-  commonChecks.isUserExistsForParams, 
-  commonChecks.isTopicExistsForBody,
+  isUserExistsForParams, 
+  isTopicExistsForBody,
   linkController.addNewLink
 );
 
@@ -52,7 +52,7 @@ router.post('/:userId/links',
  * PUT requests
 */
 router.put('/:userId', 
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   userController.updateUser
 );
 
@@ -60,11 +60,11 @@ router.put('/:userId',
  * DELETE requests
 */
 router.delete('/:userId', 
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   userController.deleteUser
 );
 router.delete('/:userId/links/:linkId',
-  commonChecks.isUserExistsForParams,
+  isUserExistsForParams,
   linkController.deleteLink
 );
 
