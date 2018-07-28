@@ -120,3 +120,23 @@ exports.isManagerExistsForParams = (req, res, next) => {
     });
   });
 }
+
+/** 
+ * checks is manager role equal to admin
+*/
+exports.isAdminForParams = (req, res, next) => {
+  const managerId = req.params.managerId;
+
+  Manager.findOne({ _id: managerId, role: 'admin' })
+  .then((response) => {
+    if (!response) {
+      return res.sendStatus(401);
+    }
+    next();
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  })
+}
