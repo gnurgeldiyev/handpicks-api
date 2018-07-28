@@ -225,16 +225,7 @@ exports.updateUser = async (req, res) => {
     }
   }, { new: true })
   .then((response) => {
-    // get updated user
-		User.findById(response._id)
-		.then ((response) => {			
-			return res.status(200).json({ user: response.profileToJson() });
-		})
-		.catch((err) => {
-			return res.status(500).json({
-				err: err.message
-			});
-		});
+    return res.status(200).json({ user: response.profileToJson() });
   })
   .catch((err) => {
     return res.status(422).json({
