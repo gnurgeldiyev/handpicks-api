@@ -97,12 +97,12 @@ exports.isPostExistsForParams = (req, res, next) => {
  * checks is manager exists for request params
 */
 exports.isManagerExistsForParams = (req, res, next) => {
-  const username = req.params.username;
-  if (!username) {
+  const managerId = req.params.managerId;
+  if (!managerId) {
     return res.sendStatus(400);
   }
 
-  Manager.findOne({ username })
+  Manager.findById(managerId)
   .then((response) => {
     if (!response) { 
 			return res.sendStatus(404);
