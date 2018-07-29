@@ -17,7 +17,8 @@ exports.linkToJson = (link) => {
     };
     return publicLink;    
   } catch (err) {
-    throw Error (err);
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return false;
   }
 }
 
@@ -41,7 +42,8 @@ exports.postToJson = (post) => {
     };
     return publicPost;    
   } catch (err) {
-    throw Error (err);
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return false;
   }
 }
 
@@ -85,6 +87,7 @@ exports.topicFollowToJson = (topicFollow) => {
     }
     return publicTopicFollow; 
   } catch (err) {
-    throw Error (err);
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return false;
   }
 }

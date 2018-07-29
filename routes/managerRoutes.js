@@ -2,22 +2,32 @@ const router = require('express').Router();
 const managerController = require('../controllers/managerController');
 const clientController = require('../controllers/clientController');
 const { isManagerExistsForParams, isAdminForParams, isClientExistsForParams } = require('../middlewares/commonChecks');
+const { isAuthenticatedManager } = require('../middlewares/auth');
 
 /**
  * GET requests
 */
-router.get('/', managerController.getAllManagers);
-router.get('/editors', managerController.getAllEditors);
+router.get('/', 
+  isAuthenticatedManager,
+  managerController.getAllManagers
+);
+router.get('/editors', 
+  isAuthenticatedManager,
+  managerController.getAllEditors
+);
 router.get('/:managerId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   managerController.getManagerByUsername
 );
 router.get('/:managerId/clients', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   clientController.getAllClients
 );
 router.get('/:managerId/clients/:clientId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   isClientExistsForParams,
@@ -27,9 +37,17 @@ router.get('/:managerId/clients/:clientId',
 /**
  * POST requests
 */
-router.post('/', managerController.addNewManager);
+router.post('/', 
+  isAuthenticatedManager,
+  managerController.addNewManager
+);
 router.post('/login', managerController.login);
+router.post('/logout', 
+  isAuthenticatedManager,
+  managerController.logout
+);
 router.post('/:managerId/clients', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   clientController.addNewClient
@@ -39,10 +57,12 @@ router.post('/:managerId/clients',
  * PUT requests
 */
 router.put('/:managerId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   managerController.updateManager
 );
 router.put('/:managerId/clients/:clientId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   isClientExistsForParams,
@@ -53,11 +73,13 @@ router.put('/:managerId/clients/:clientId',
  * DELETE requests
 */
 router.delete('/:managerId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   managerController.deleteManager
 );
 router.delete('/:managerId/clients/:clientId', 
+  isAuthenticatedManager,
   isManagerExistsForParams,
   isAdminForParams,
   isClientExistsForParams,

@@ -2,39 +2,40 @@ const router = require('express').Router();
 const userController = require('../controllers/userController');
 const linkController = require('../controllers/linkController');
 const { isUserExistsForParams, isTopicExistsForParams, isTopicExistsForBody } = require('../middlewares/commonChecks');
-const auth = require('../middlewares/auth');
+const { isAuthenticatedUser } = require('../middlewares/auth');
 
 /**
  * GET requests
 */
 router.get('/:userId',
+  isAuthenticatedUser,
   isUserExistsForParams,
   userController.getUserById
 );
 router.get('/:userId/links',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   linkController.getUserAllLinks
 );
 router.get('/:userId/links/:linkId',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   linkController.getUserLinkById
 );
 router.get('/:userId/links/topics/:topicId',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   isTopicExistsForParams,
   linkController.getUserLinksByTopic
 );
 router.get('/:userId/topics/:topicId',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   isTopicExistsForParams,
   userController.topicFollowUnfollow  
 );
 router.get('/:userId/posts',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   userController.getUserPosts
 );
@@ -44,12 +45,12 @@ router.get('/:userId/posts',
 */
 router.post('/', userController.userSignIn);
 router.post('/:userId/logout',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   userController.userLogout
 );
 router.post('/:userId/links',
-  auth.isAuthenticated, 
+  isAuthenticatedUser, 
   isUserExistsForParams, 
   isTopicExistsForBody,
   linkController.addNewLink
@@ -59,7 +60,7 @@ router.post('/:userId/links',
  * PUT requests
 */
 router.put('/:userId', 
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   userController.updateUser
 );
@@ -68,12 +69,12 @@ router.put('/:userId',
  * DELETE requests
 */
 router.delete('/:userId', 
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   userController.deleteUser
 );
 router.delete('/:userId/links/:linkId',
-  auth.isAuthenticated,
+  isAuthenticatedUser,
   isUserExistsForParams,
   linkController.deleteLink
 );

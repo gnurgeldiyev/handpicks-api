@@ -119,14 +119,58 @@ exports.login = (req, res) => {
     if (!response) {
       return res.sendStatus(404);
     }
-    if (unhashPassword(response.password).password === manager.password) {
-      return res.status(200).json({ manager: response.profileToJson() });
+    if (unhashPassword(response.password).password !== manager.password) {
+      return res.sendStatus(401);
     }
-    return res.sendStatus(401);
+    
+    Manager.findByIdAndUpdate(response._id, {
+      $set: {
+        token: response.generateToken()
+      }
+    }, { new: true })
+    .then((response) => {
+      return res.status(200).json({ manager: response.profileToJson() });
+    })
+    .catch((err) => {
+      return res.status(500).json({ err: err.message });
+    });
   })
   .catch((err) => {
     return res.status(500).json({ err: err.message });
   })
+}
+
+/** 
+ * POST | logout the manager
+*/
+exports.logout = (req, res) => {
+  const manager = req.body.manager;
+  
+  if (!manager 
+    || !manager.id 
+    || !manager.token) {
+    return res.sendStatus(400);
+  }
+
+  Manager.findOneAndUpdate({
+    _id: manager.id,
+    token: manager.token
+  }, {
+    $set: {
+      token: null
+    }
+  }, { new: true })
+  .then((response) => {
+    if (!response) {
+      return res.status(400).json({ err: "User token does not match with stored token."});
+    }
+    return res.sendStatus(204);
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
 }
 
 /** 

@@ -21,13 +21,16 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "firebase-admin": "^5.13.0",
     "got": "^8.3.2",
+    "helmet": "^3.13.0",
     "jsonwebtoken": "^8.3.0",
     "metascraper": "^3.11.8",
     "mongoose": "^5.2.4",
+    "morgan": "^1.9.0",
     "validator": "^10.4.0"
   }
 }

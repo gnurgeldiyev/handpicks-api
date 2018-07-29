@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
+const path = require('path');
+const fs = require('fs');
+const compression = require("compression");  
+const helmet = require("helmet");
 const userRoutes = require('../routes/userRoutes');
 const topicRoutes = require('../routes/topicRoutes');
 const postRoutes = require('../routes/postRoutes');
@@ -23,6 +28,20 @@ mongoose.connection.on('error', (err) => {
   console.log(`MongoDB connection is failed → ${err.message}`); 
 });
 
+// log only 4xx and 5xx responses to console
+app.use(morgan('dev', {
+  skip: function (req, res) { return res.statusCode < 400 }
+}));
+
+// log all requests to access.log
+app.use(morgan('common', {
+  stream: fs.createWriteStream(path.join(__dirname + '/../logs/access.log'), {flags: 'a'})
+}));
+
+// a security middleware that handles several kinds of attacks in the HTTP/HTTPS protocols
+app.use(helmet());
+
+// CORS config
 app.use(cors({  
   origin: '*',
   optionsSuccessStatus: 200,
@@ -32,6 +51,9 @@ app.use(cors({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Compacting requests using GZIP middleware
+app.use(compression());
 
 // client name and apiKey check
 app.use(isValidClient);

@@ -28,9 +28,8 @@ exports.isValidClient = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -51,9 +50,8 @@ exports.isUserExistsForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -74,9 +72,8 @@ exports.isTopicExistsForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -97,7 +94,8 @@ exports.isTopicExistsForBody = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({ err: err.message });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -118,9 +116,8 @@ exports.isPostExistsForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -141,9 +138,8 @@ exports.isManagerExistsForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }
 
@@ -161,9 +157,8 @@ exports.isAdminForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   })
 }
 
@@ -184,8 +179,7 @@ exports.isClientExistsForParams = (req, res, next) => {
     next();
   })
   .catch((err) => {
-    return res.status(500).json({
-      err: err.message
-    });
+    console.log(`err: ${err} \nmessage: ${err.message}`);
+    return res.sendStatus(500);
   });
 }

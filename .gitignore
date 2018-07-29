@@ -3,6 +3,7 @@ node_modules
 
 # logs
 npm-debug.log
+logs/
 
 # IDE
 .idea
@@ -14,8 +15,7 @@ npm-debug.log
 .vscode/
 
 # Configs
-config
+config/
 
 # .env
-.env
-variables.env
+*.env

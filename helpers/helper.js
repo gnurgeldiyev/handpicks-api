@@ -26,6 +26,7 @@ exports.getHostname = (url) => {
     //find & remove "?"
     hostname = hostname.split('?')[0];
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 	return hostname;
@@ -41,6 +42,7 @@ exports.getMetadata = async (link) => {
     const { body: html, url } = await got(link);
     metadata = await metascraper({ html, url });
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
   return metadata;
@@ -53,6 +55,7 @@ exports.hashPassword = function (password) {
   try {
     return jwt.sign({ password: password }, passwordSalt);
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 }
@@ -65,6 +68,7 @@ exports.unhashPassword = function (hashedPassword) {
     const decoded = jwt.verify(hashedPassword, passwordSalt);
     return decoded;
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 }
@@ -86,6 +90,7 @@ exports.getClientConfig = function (authorizationHeader) {
     apiKey = apiKey.split('=')[1].trim();
 
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 
@@ -102,6 +107,7 @@ exports.hashClientName = function (name) {
   try {
     return jwt.sign({ private_name: name }, apiKeySalt);
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   } 
 }
@@ -114,6 +120,7 @@ exports.unhashClientName = function (hashedName) {
     const decoded = jwt.verify(hashedName, apiKeySalt);
     return decoded;
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 }
@@ -132,6 +139,7 @@ exports.getAuthToken = function (authorizationHeader) {
     token = token.split('=')[1].trim();
 
   } catch (err) {
+    console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
   }
 
