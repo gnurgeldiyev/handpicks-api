@@ -26,7 +26,7 @@ const postSchema = mongoose.Schema({
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Manager'
   },
   topic: {
     type: mongoose.Schema.Types.ObjectId,
