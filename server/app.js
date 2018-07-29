@@ -14,6 +14,10 @@ const managerRoutes = require('../routes/managerRoutes');
 const { isValidClient } = require('../middlewares/commonChecks');
  
 const app = express();
+
+// import .env variables
+require('dotenv').config({ path: 'variables.env' });
+
 const host = process.env.HOST || '127.0.0.1';
 const port = process.env.PORT || 4000;
 const mongoDbUri = process.env.MONGODB || 'mongodb+srv://kalilin:5gbUx5xE6yWvCeNz@handpicks-test-oktuz.mongodb.net/test';
