@@ -29,7 +29,7 @@ All API requests must contain an **Authorization** header.
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`  |
 
-### 📍 [2. API Endpoints][api-endpoints]
+### 📍 2. API Endpoints
 
 #### Users
 
