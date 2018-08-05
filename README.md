@@ -19,7 +19,8 @@
 		- get user posts
 
 ### 🌏 1. Global Config
- 🔐	For configuration: each API client must have a private name, public name and API key.
+
+🔐	For configuration: each API client must have a private name, public name and API key.
 All API requests must contain an **Authorization** header.
 
 **Headers**
@@ -29,9 +30,11 @@ All API requests must contain an **Authorization** header.
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`  |
 
 ### 📍 [2. API Endpoints][api-endpoints]
+
 #### Users
 
 #### • user sign in
+
 ⚠️ User authentication is handled with Firebase Auth. If the user signs in for the first time, server creates a new user and logs in. If user already exists in DB, then only logs in.
 
 
@@ -56,9 +59,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • update user
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -85,9 +90,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • get user by userId
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -114,6 +121,7 @@ All API requests must contain an **Authorization** header.
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -139,9 +147,11 @@ All API requests must contain an **Authorization** header.
 --------
 
 #### • delete user
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -165,9 +175,11 @@ All API requests must contain an **Authorization** header.
 --------
 
 #### • add new link
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -193,9 +205,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • get user link by linkId
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -219,9 +233,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • get user links by topicId
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -245,9 +261,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • get user all links
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -271,9 +289,11 @@ All API requests must contain an **Authorization** header.
 --------
 
 #### • delete link
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -298,9 +318,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • user follow/unfollow topic
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
@@ -325,9 +347,11 @@ All API requests must contain an **Authorization** header.
 ------------
 
 #### • get user posts
+
 🔑 Requires Authentication: user must be authenticated with Firebase. Client must assign Firebase idToken in the Authorization header.
 
 **Headers**
+
 | Key  | Value |
 | ------------- | ------------- |
 | Authorization  | name=`{publicName}`, apiKey=`{apiKey}`, token=`{idToken}`  |
