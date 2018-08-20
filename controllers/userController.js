@@ -147,7 +147,7 @@ exports.userSignIn = (req, res) => {
         });
       })
       .catch((err) => {
-        return res.status(400).json({
+        return res.status(500).json({
           err: err.message
         });
       });
@@ -164,14 +164,14 @@ exports.userSignIn = (req, res) => {
         });
       })
       .catch((err) => {
-        return res.status(400).json({
+        return res.status(500).json({
           err: err.message
         });
       });
     }
   })
   .catch((err) => {
-    return res.status(400).json({
+    return res.status(500).json({
       err: err.message
     });
   });
