@@ -30,7 +30,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
       if (!response) { 
         return res.sendStatus(401);
       }
-      
+      console.log('here');
       User.findOne({ token })
       .then((response) => {
         if (!response) {
@@ -55,7 +55,7 @@ exports.isAuthenticatedUser = (req, res, next) => {
 }
 
 /** 
- * Function | Checks is user authenticated with Firebase Auth
+ * Function | Checks is manager authenticated with email and password
 */
 exports.isAuthenticatedManager = (req, res, next) => {
   const token = getAuthToken(req.get('authorization'));

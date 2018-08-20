@@ -13,9 +13,9 @@ exports.isValidClient = (req, res, next) => {
     return res.sendStatus(401);
   }
   const client = getClientConfig(req.get('authorization'));
-  const name = unhashClientName(client.name).private_name;
+  const name = unhashClientName(client.name).public_name;
 
-  Client.findOne({ private_name: name, 'api_key': client.apiKey })
+  Client.findOne({ public_name: name, 'api_key': client.apiKey })
   .then((response) => {
     if (!response) {
       return res.sendStatus(401);
@@ -81,12 +81,12 @@ exports.isTopicExistsForParams = (req, res, next) => {
  * checks is topic exists for request body
 */
 exports.isTopicExistsForBody = (req, res, next) => {
-  const newLink = req.body.link;
-  if (!newLink) {
+  const topicId = req.body.link.topicId;
+  if (!topicId) {
     return res.sendStatus(400);
   }
 
-	Topic.findById(newLink.topicId)
+	Topic.findById(topicId)
   .then((response) => {
 		if (!response) { 
 			return res.sendStatus(404);
