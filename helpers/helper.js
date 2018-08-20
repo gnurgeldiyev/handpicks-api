@@ -78,26 +78,29 @@ exports.unhashPassword = function (hashedPassword) {
 */
 exports.getClientConfig = function (authorizationHeader) {
   let name, apiKey;
-  try {
-    name = authorizationHeader.split(',')[0];
-    apiKey = authorizationHeader.split(',')[1];
-
-    if (!name
-      || !apiKey) {
+  if (authorizationHeader) {
+    try {
+      name = authorizationHeader.split(',')[0];
+      apiKey = authorizationHeader.split(',')[1];
+  
+      if (!name
+        || !apiKey) {
+        return false;
+      }
+      name = name.split('=')[1].trim();
+      apiKey = apiKey.split('=')[1].trim();
+  
+    } catch (err) {
+      console.log(`err: ${err} \nmessage: ${err.message}`);
       return false;
     }
-    name = name.split('=')[1].trim();
-    apiKey = apiKey.split('=')[1].trim();
-
-  } catch (err) {
-    console.log(`err: ${err} \nmessage: ${err.message}`);
-    return false;
+  
+    return {
+      name,
+      apiKey
+    };
   }
-
-  return {
-    name,
-    apiKey
-  };
+  return false;
 }
 
 /**
@@ -105,7 +108,7 @@ exports.getClientConfig = function (authorizationHeader) {
 */
 exports.hashClientName = function (name) {
   try {
-    return jwt.sign({ private_name: name }, apiKeySalt);
+    return jwt.sign({ public_name: name }, apiKeySalt);
   } catch (err) {
     console.log(`err: ${err} \nmessage: ${err.message}`);
     return false;
