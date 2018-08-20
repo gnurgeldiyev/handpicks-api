@@ -7,7 +7,6 @@ const userSchema = mongoose.Schema({
     trim: true,
     unique: true,
     lowercase: true,
-    match: [/^[a-zA-Z0-9]+$/, 'is invalid']
   },
   email: {
     type: String,
@@ -15,23 +14,22 @@ const userSchema = mongoose.Schema({
     trim: true,
     unique: true,
     lowercase: true,
-    match: [/\S+@\S+\.\S+/, 'is invalid']
   },
   name: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 50
+    maxlength: 64
   },
   lastname: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 50
+    maxlength: 64
   },
   bio: {
     type: String,
-    maxlength: 150
+    maxlength: 128
   },
   avatar: String,
   token: {
