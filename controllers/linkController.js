@@ -104,14 +104,12 @@ exports.addNewLink = async (req, res) => {
 	}
 
 	link.save()
-	.then(() => {
+	.then((response) => {
 		// gets saved link with populated public infos.
-		Link.findById(link._id).populate('owner').populate('topic')
-		.then ((response) => {
-			if (!response) { return res.sendStatus(404); }
-			
+		Link.findById(response._id).populate('owner').populate('topic')
+		.then ((response) => {			
 			let link = linkToJson(response);
-			return res.status(200).json({ link });
+			return res.status(201).json({ link });
 		})
 		.catch((err) => {
 			return res.status(500).json({
