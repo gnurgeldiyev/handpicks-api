@@ -33,8 +33,13 @@ clientSchema.methods.clientToJson = function () {
   return {
     id: this._id,
     name: this.public_name,
-    apiKey: this.api_key,
     created: this.created
+  };
+};
+clientSchema.methods.keyToJson = function () {
+  return {
+    name: this.private_name,
+    apiKey: this.api_key,
   };
 };
 

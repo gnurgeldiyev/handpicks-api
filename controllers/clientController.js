@@ -52,13 +52,13 @@ exports.addNewClient = (req, res) => {
   }
 
   let client = new Client({
-    private_name: newClient.name,
-    public_name: hashClientName(newClient.name)
+    public_name: newClient.name,
+    private_name: hashClientName(newClient.name)
   });
 
   client.save()
   .then((response) => {
-    Client.findOneAndUpdate({ private_name: response.private_name }, {
+    Client.findOneAndUpdate({ public_name: response.public_name }, {
       $set: {
         api_key: response.generateApiKey()
       }
@@ -93,8 +93,8 @@ exports.updateClient = (req, res) => {
 
   Client.findByIdAndUpdate(clientId, {
     $set: {
-      private_name: client.name,
-      public_name: hashClientName(client.name)
+      public_name: client.name,
+      private_name: hashClientName(client.name)
     }
   }, { new: true })
   .then((response) => {
