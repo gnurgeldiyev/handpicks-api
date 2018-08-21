@@ -23,7 +23,7 @@ exports.getPostsByQuery = (req, res) => {
 		'$lt': dayAfter
 	}}).populate('owner').populate('topic')
 	.then((response) => {
-    if(!response) { return res.sendStatus(404); }
+    if(!response.length) { return res.sendStatus(404); }
 
     let posts = [];
     response.forEach((post) => {
@@ -59,7 +59,7 @@ exports.getPostById = (req, res) => {
 }
 
 /**
- * GET | get topic's all posts by topicId
+ * GET | get topic all posts or get topic posts by query date
 */
 exports.getTopicAllPosts = (req, res) => {
 	let date = req.query.date;
@@ -68,7 +68,7 @@ exports.getTopicAllPosts = (req, res) => {
 	if (!date) {
 		Post.find({ topic: topicId }).populate('owner').populate('topic')
 		.then((response) => {
-			if(!response) { return res.sendStatus(404); }
+			if(!response.length) { return res.sendStatus(404); }
 
 			let posts = [];
 			response.forEach((post) => {
@@ -97,7 +97,7 @@ exports.getTopicAllPosts = (req, res) => {
 			'$lt': dayAfter
 		}}).populate('owner').populate('topic')
 		.then((response) => {
-			if(!response) { return res.sendStatus(404); }
+			if(!response.length) { return res.sendStatus(404); }
 	
 			let posts = [];
 			response.forEach((post) => {
@@ -123,7 +123,7 @@ exports.addNewPost = async (req, res) => {
     || !isURL(newPost.url)
     || !newPost.ownerId
     || !newPost.topicId
-    || !isLength(newPost.summary, { min: 200, max: 300 })
+    || !isLength(newPost.summary, { min: 250, max: 500 })
     || !newPost.tags) {
     return res.sendStatus(400);
   }
@@ -166,7 +166,7 @@ exports.addNewPost = async (req, res) => {
 		});
 	})
 	.catch((err) => {
-		return res.status(400).json({
+		return res.status(500).json({
 			err: err.message
 		});
 	});
@@ -183,7 +183,7 @@ exports.updatePost = async (req, res) => {
     return res.sendStatus(400);
 	}
 	if(post.summary) {
-		if (!isLength(post.summary, { min: 200, max: 300 })) {
+		if (!isLength(post.summary, { min: 250, max: 500 })) {
 			return res.sendStatus(422);
 		}
 	}
@@ -214,7 +214,7 @@ exports.updatePost = async (req, res) => {
 		});
   })
   .catch((err) => {
-    return res.status(422).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }
 
@@ -229,6 +229,6 @@ exports.deletePost = (req, res) => {
     return res.sendStatus(204);
   })
   .catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }

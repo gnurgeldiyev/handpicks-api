@@ -7,7 +7,7 @@ const { hashClientName } = require('../helpers/helper');
 exports.getAllClients = (req, res) => {
   Client.find()
   .then((response) => {
-    if (!response) {
+    if (!response.length) {
       return res.sendStatus(404);
     }
     let clients = [];

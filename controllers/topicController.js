@@ -7,7 +7,7 @@ const { isLength, ltrim } = require('validator');
 exports.getAllTopics = (req, res) => {
 	Topic.find()
   .then((response) => {
-    if(!response) { return res.sendStatus(404); }
+    if(!response.length) { return res.sendStatus(404); }
 
 		let topics = [];
 		response.forEach((topic) => {
@@ -16,7 +16,7 @@ exports.getAllTopics = (req, res) => {
     return res.status(200).json({ topics });
   })
   .catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }
 
@@ -31,7 +31,7 @@ exports.getTopicById = (req, res) => {
     return res.status(200).json({ topic: response.topicToJson() });
   })
   .catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }
 
@@ -58,7 +58,7 @@ exports.addNewTopic = (req, res) => {
   .then(() => {
     return res.status(201).json({ topic: topic.topicToJson() });
   }).catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }
 
@@ -87,7 +87,7 @@ exports.updateTopic = (req, res) => {
     return res.status(200).json({ topic: response.topicToJson() });
   })
   .catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }
 
@@ -102,6 +102,6 @@ exports.deleteTopic = (req, res) => {
     return res.sendStatus(204);
   })
   .catch((err) => {
-    return res.status(400).json({ err: err.message });
+    return res.status(500).json({ err: err.message });
   });
 }

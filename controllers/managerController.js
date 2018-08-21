@@ -8,7 +8,7 @@ const { isEmail, isLength } = require('validator');
 exports.getAllManagers = (req, res) => {
   Manager.find().sort({ role: 1 })
   .then((response) => {
-    if (!response) {
+    if (!response.length) {
       return res.sendStatus(404);
     }
 
@@ -31,7 +31,7 @@ exports.getAllManagers = (req, res) => {
 exports.getAllEditors = (req, res) => {
   Manager.find({ role: 'editor' })
   .then((response) => {
-    if (!response) {
+    if (!response.length) {
       return res.sendStatus(404);
     }
 
@@ -75,6 +75,7 @@ exports.addNewManager = (req, res) => {
     || !newManager.name 
     || !newManager.lastname 
     || !newManager.password
+    || !newManager.role
     || !isLength(newManager.password, { min:6 })) {
     return res.sendStatus(400);
   }
@@ -85,6 +86,7 @@ exports.addNewManager = (req, res) => {
     password: hashPassword(newManager.password),
     name: newManager.name,
     lastname: newManager.lastname,
+    role: newManager.role
   });
 
   manager.save()

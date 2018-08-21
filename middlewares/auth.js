@@ -30,7 +30,6 @@ exports.isAuthenticatedUser = (req, res, next) => {
       if (!response) { 
         return res.sendStatus(401);
       }
-      console.log('here');
       User.findOne({ token })
       .then((response) => {
         if (!response) {
@@ -40,17 +39,17 @@ exports.isAuthenticatedUser = (req, res, next) => {
       })
       .catch((err) => {
         console.log(`err: ${err} \nmessage: ${err.message}`);
-        return res.sendStatus(401);
+        return res.sendStatus(500);
       });
     })
     .catch((err) => {
       console.log(`err: ${err} \nmessage: ${err.message}`);
-      return res.sendStatus(401);
+      return res.sendStatus(500);
     }); 
   })
   .catch((err) => {
     console.log(`err: ${err} \nmessage: ${err.message}`);
-    return res.sendStatus(401);
+    return res.sendStatus(500);
   });
 }
 
@@ -81,11 +80,11 @@ exports.isAuthenticatedManager = (req, res, next) => {
     }) 
     .catch((err) => {
       console.log(`err: ${err} \nmessage: ${err.message}`);
-      return res.sendStatus(401);
+      return res.sendStatus(500);
     });
   })
   .catch((err) => {
     console.log(`err: ${err} \nmessage: ${err.message}`);
-    return res.sendStatus(401);
+    return res.sendStatus(500);
   });
 }

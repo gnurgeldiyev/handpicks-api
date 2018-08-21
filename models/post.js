@@ -21,7 +21,7 @@ const postSchema = mongoose.Schema({
   },
   summary: {
     type: String,
-    maxlength: 300,
+    maxlength: 500,
     required: true
   },
   owner: {
@@ -41,8 +41,8 @@ const postSchema = mongoose.Schema({
 });
 
 postSchema.index({
-  summary: 1,
-  tags: 1
+  link_title: 1,
+  summary: 1
 });
 
 const Post = mongoose.model('Post', postSchema);

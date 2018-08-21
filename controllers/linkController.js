@@ -11,7 +11,7 @@ exports.getUserAllLinks = (req, res) => {
 
 	Link.find({ owner: userId }).populate('owner').populate('topic')
 	.then((response) => {
-		if (!response) { return res.sendStatus(404); }
+		if (!response.length) { return res.sendStatus(404); }
 
 		let links = [];
 		response.forEach((link) => {
@@ -55,7 +55,7 @@ exports.getUserLinksByTopic = (req, res) => {
 
 	Link.find({ owner: userId, topic: topicId }).populate('owner').populate('topic')
 	.then((response) => {
-		if (!response) { return res.sendStatus(404); }
+		if (!response.length) { return res.sendStatus(404); }
 
 		let links = [];
 		response.forEach((link) => {
@@ -118,7 +118,7 @@ exports.addNewLink = async (req, res) => {
 		});
 	})
 	.catch((err) => {
-		return res.status(400).json({
+		return res.status(500).json({
 			err: err.message
 		});
 	});
@@ -138,7 +138,7 @@ exports.deleteLink = (req, res) => {
 		return res.sendStatus(204);
 	})
 	.catch((err) => {
-		return res.status(400).json({
+		return res.status(500).json({
 			err: err.message
 		});
 	});
