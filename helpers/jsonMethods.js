@@ -11,7 +11,6 @@ exports.linkToJson = (link) => {
 			title: link.link_title,
 			tags: link.tags,
 			created: link.created,
-			updated: link.updated,
 			owner: profileToJson(link.owner),
 			topic: topicToJson(link.topic),
     };
@@ -57,7 +56,8 @@ const profileToJson = (user) => {
     name: user.name,
     lastname: user.lastname,
     bio: user.bio,
-    avatar: user.avatar
+    avatar: user.avatar,
+    created: user.created
   };
 }
 
@@ -69,7 +69,8 @@ const topicToJson = (topic) => {
     id: topic._id,
 		title: topic.title,
 		url: topic.url,
-		description: topic.description
+    description: topic.description,
+    created: topic.created
   };
 }
 

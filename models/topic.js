@@ -23,7 +23,8 @@ topicSchema.methods.topicToJson = function () {
 		id: this._id,
 		title: this.title,
 		url: this.url,
-		description: this.description
+		description: this.description,
+		created: this.created,
 	};
 };
 
