@@ -41,6 +41,23 @@ exports.getClientById = (req, res) => {
 }
 
 /** 
+ * GET | get the client apiKey and private name
+*/
+exports.getClientKeys = (req, res) => {
+  const clientId = req.params.clientId;
+
+  Client.findById(clientId)
+  .then((response) => {
+    return res.status(200).json({ client: response.keyToJson() });
+  })
+  .catch((err) => {
+    return res.status(500).json({
+      err: err.message
+    });
+  });
+}
+
+/** 
  * POST | add a new API client
 */
 exports.addNewClient = (req, res) => {

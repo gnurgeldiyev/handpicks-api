@@ -33,6 +33,13 @@ router.get('/:managerId/clients/:clientId',
   isClientExistsForParams,
   clientController.getClientById
 );
+router.get('/:managerId/clients/:clientId/keys', 
+  isAuthenticatedManager,
+  isManagerExistsForParams,
+  isAdminForParams,
+  isClientExistsForParams,
+  clientController.getClientKeys
+);
 
 /**
  * POST requests
