@@ -11,6 +11,7 @@ const userRoutes = require('../routes/userRoutes');
 const topicRoutes = require('../routes/topicRoutes');
 const postRoutes = require('../routes/postRoutes');
 const managerRoutes = require('../routes/managerRoutes');
+const messageRoutes = require('../routes/messageRoutes');
 const { isValidClient } = require('../middlewares/commonChecks');
  
 const app = express();
@@ -67,6 +68,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/topics', topicRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/managers', managerRoutes);
+app.use('/api/v1/messages', messageRoutes);
 
 // Listen the server
 app.listen(port, host);
