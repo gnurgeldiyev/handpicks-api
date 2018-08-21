@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const tokenSalt = process.env.TOKEN_SALT || 'SUPERP@SSWORD!';
-
 const managerSchema = mongoose.Schema({
   username: {
     type: String,
@@ -48,7 +47,6 @@ const managerSchema = mongoose.Schema({
     updatedAt: 'updated'
   }
 });
-
 managerSchema.methods.generateToken = function () {
   try {
     return jwt.sign({ id: this._id }, tokenSalt);
@@ -56,7 +54,6 @@ managerSchema.methods.generateToken = function () {
     return false;
   }
 }
-
 managerSchema.methods.verifyToken = function () {
   try {
     const decoded = jwt.verify(this.token, tokenSalt);
@@ -65,7 +62,6 @@ managerSchema.methods.verifyToken = function () {
     return false;
   }
 }
-
 managerSchema.methods.profileToJson = function () {
   return {
     id: this._id,
@@ -77,7 +73,5 @@ managerSchema.methods.profileToJson = function () {
     token: this.token
   };
 };
-
 const Manager = mongoose.model('Manager', managerSchema);
-
 module.exports = { Manager }

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const postSchema = mongoose.Schema({
   link_hostname: {
     type: String,
@@ -39,14 +38,9 @@ const postSchema = mongoose.Schema({
     updatedAt: 'updated'
   }
 });
-
 postSchema.index({
   link_title: 1,
   summary: 1
 });
-
 const Post = mongoose.model('Post', postSchema);
-
-module.exports = {
-  Post
-}
+module.exports = { Post }

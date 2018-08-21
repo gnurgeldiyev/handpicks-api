@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const linkSchema = mongoose.Schema({
 	link_hostname: {
 		type: String,
@@ -34,11 +33,8 @@ const linkSchema = mongoose.Schema({
 		updatedAt: 'updated'
 	}
 });
-
 linkSchema.index({
 	link_title: 1
 });
-
 const Link = mongoose.model('Link', linkSchema);
-
 module.exports = { Link } 

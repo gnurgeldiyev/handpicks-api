@@ -3,7 +3,6 @@ const userController = require('../controllers/userController');
 const linkController = require('../controllers/linkController');
 const { isUserExistsForParams, isTopicExistsForParams, isTopicExistsForBody } = require('../middlewares/commonChecks');
 const { isAuthenticatedUser, isAuthenticatedManager } = require('../middlewares/auth');
-
 /**
  * GET requests
 */
@@ -43,11 +42,12 @@ router.get('/:userId/posts',
   isUserExistsForParams,
   userController.getUserPosts
 );
-
 /**
  * POST requests
 */
-router.post('/', userController.userSignIn);
+router.post('/', 
+  userController.userSignIn
+);
 router.post('/:userId/logout',
   isAuthenticatedUser,
   isUserExistsForParams,
@@ -59,7 +59,6 @@ router.post('/:userId/links',
   isTopicExistsForBody,
   linkController.addNewLink
 );
-
 /**
  * PUT requests
 */
@@ -68,7 +67,6 @@ router.put('/:userId',
   isUserExistsForParams,
   userController.updateUser
 );
-
 /**
  * DELETE requests
 */
@@ -82,5 +80,4 @@ router.delete('/:userId/links/:linkId',
   isUserExistsForParams,
   linkController.deleteLink
 );
-
 module.exports = router;

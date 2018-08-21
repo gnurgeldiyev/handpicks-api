@@ -20,7 +20,6 @@ exports.linkToJson = (link) => {
     return false;
   }
 }
-
 /** 
  * returns public post info
 */
@@ -45,7 +44,6 @@ exports.postToJson = (post) => {
     return false;
   }
 }
-
 /** 
  * returns public user profile info
 */
@@ -60,7 +58,6 @@ const profileToJson = (user) => {
     created: user.created
   };
 }
-
 /** 
  * returns public topic info
 */
@@ -73,7 +70,6 @@ const topicToJson = (topic) => {
     created: topic.created
   };
 }
-
 /** 
  * returns public topicFollow data with populated info
 */

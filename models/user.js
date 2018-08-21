@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const userSchema = mongoose.Schema({
   username: {
     type: String,
@@ -42,11 +41,9 @@ const userSchema = mongoose.Schema({
     updatedAt: 'updated'
   }
 });
-
 userSchema.index({
   username: 1
 });
-
 userSchema.methods.profileToJson = function () {
   return {
     id: this._id,
@@ -58,7 +55,5 @@ userSchema.methods.profileToJson = function () {
     created: this.created
   };
 };
-
 const User = mongoose.model('User', userSchema);
-
 module.exports = { User }

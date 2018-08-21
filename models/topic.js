@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const topicSchema = mongoose.Schema({
 	title: {
 		type: String,
@@ -17,7 +16,6 @@ const topicSchema = mongoose.Schema({
 		required: true
 	}
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
-
 topicSchema.methods.topicToJson = function () {
 	return {
 		id: this._id,
@@ -27,7 +25,5 @@ topicSchema.methods.topicToJson = function () {
 		created: this.created,
 	};
 };
-
 const Topic = mongoose.model('Topic', topicSchema);
-
 module.exports = { Topic };

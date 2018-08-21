@@ -3,7 +3,6 @@ const managerController = require('../controllers/managerController');
 const clientController = require('../controllers/clientController');
 const { isManagerExistsForParams, isAdminForParams, isClientExistsForParams } = require('../middlewares/commonChecks');
 const { isAuthenticatedManager } = require('../middlewares/auth');
-
 /**
  * GET requests
 */
@@ -40,7 +39,6 @@ router.get('/:managerId/clients/:clientId/keys',
   isClientExistsForParams,
   clientController.getClientKeys
 );
-
 /**
  * POST requests
 */
@@ -59,7 +57,6 @@ router.post('/:managerId/clients',
   isAdminForParams,
   clientController.addNewClient
 );
-
 /**
  * PUT requests
 */
@@ -75,7 +72,6 @@ router.put('/:managerId/clients/:clientId',
   isClientExistsForParams,
   clientController.updateClient
 );
-
 /**
  * DELETE requests
 */
@@ -92,5 +88,4 @@ router.delete('/:managerId/clients/:clientId',
   isClientExistsForParams,
   clientController.deleteClient
 );
-
 module.exports = router;
