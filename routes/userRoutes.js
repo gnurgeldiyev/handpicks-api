@@ -2,11 +2,15 @@ const router = require('express').Router();
 const userController = require('../controllers/userController');
 const linkController = require('../controllers/linkController');
 const { isUserExistsForParams, isTopicExistsForParams, isTopicExistsForBody } = require('../middlewares/commonChecks');
-const { isAuthenticatedUser } = require('../middlewares/auth');
+const { isAuthenticatedUser, isAuthenticatedManager } = require('../middlewares/auth');
 
 /**
  * GET requests
 */
+router.get('/',
+  isAuthenticatedManager,
+  userController.getUserByQuery
+);
 router.get('/:userId',
   isAuthenticatedUser,
   isUserExistsForParams,

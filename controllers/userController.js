@@ -3,7 +3,56 @@ const { Link } = require('../models/link');
 const { Post } = require('../models/post');
 const { TopicFollow } = require('../models/topicFollow');
 const { topicFollowToJson, postToJson } = require('../helpers/jsonMethods');
-const { isEmail } = require('validator');
+const { isEmail, isInt } = require('validator');
+
+/**
+ * GET | get user by query. without query request returns total count of the users.
+*/
+exports.getUserByQuery = (req, res) => {
+  const lastDay = req.query.lastDay;
+
+  // returns total count of the users
+	if (!lastDay) {
+		User.count()
+		.then((response) => {
+			if(!response) { return res.sendStatus(404); }
+
+			return res.status(200).json({ totalUser: response });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
+	} else { // return last days users by query ?last=28
+		if (!isInt(lastDay, { min: 1, max: 365 })) {
+			return res.sendStatus(400);
+		}
+
+    let dayAfter = new Date();
+    dayAfter.setDate(dayAfter.getDate() - lastDay);
+    console.log(dayAfter);
+	
+		User.find({
+			created: {
+			'$gte': dayAfter
+		}})
+		.then((response) => {
+			if(!response.length) { return res.sendStatus(404); }
+	
+			let users = [];
+			response.forEach((user) => {
+				users.push(user.profileToJson());
+			});
+			return res.status(200).json({ users });
+		})
+		.catch((err) => {
+			return res.status(500).json({
+				err: err.message
+			});
+		});
+	}	
+}
 
 /**
  * GET | get user by id
@@ -83,7 +132,7 @@ exports.getUserPosts = async (req, res) => {
     return res.status(500).json({ err: err.message }) 
   });
   // return 404, if there is no any followed topics.
-  if (followedTopics.length === 0) {
+  if (!followedTopics.length) {
     return res.sendStatus(404);
   }
   // getting topicId(s) in single Array
