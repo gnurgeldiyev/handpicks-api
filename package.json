@@ -1,6 +1,6 @@
 {
   "name": "handpicks_api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "handpicks project API",
   "main": "server/app.js",
   "repository": "https://github.com/gnurgeldiyev/handpicks-api.git",
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
-    "eslint": "^5.1.0"
+    "eslint": "^5.4.0"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -25,13 +25,13 @@
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
-    "firebase-admin": "^5.13.0",
-    "got": "^8.3.2",
+    "firebase-admin": "^6.0.0",
+    "got": "^9.0.0",
     "helmet": "^3.13.0",
     "jsonwebtoken": "^8.3.0",
-    "metascraper": "^3.11.8",
-    "mongoose": "^5.2.4",
+    "metascraper": "^3.12.1",
+    "mongoose": "^5.2.9",
     "morgan": "^1.9.0",
-    "validator": "^10.4.0"
+    "validator": "^10.6.0"
   }
 }
