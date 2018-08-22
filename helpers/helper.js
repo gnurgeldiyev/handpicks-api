@@ -5,8 +5,7 @@ const metascraper = require('metascraper').load([
 	require('metascraper-url')()
 ]);
 const jwt = require('jsonwebtoken');
-const passwordSalt = process.env.PASSWORD_SALT || 'SUPERP@SSWORD!';
-const apiKeySalt = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
+const { passwordSalt, apiKeySalt } = require('../config/variables');
 /**
  * Function | gets url hostname
 */

@@ -13,15 +13,9 @@ const postRoutes = require('../routes/postRoutes');
 const managerRoutes = require('../routes/managerRoutes');
 const messageRoutes = require('../routes/messageRoutes');
 const { isValidClient } = require('../middlewares/commonChecks');
- 
+const { host, port, mongoDbUri } = require('../config/variables');
+
 const app = express();
-
-// import .env variables
-require('dotenv').config({ path: 'variables.env' });
-
-const host = process.env.HOST || '127.0.0.1';
-const port = process.env.PORT || 4000;
-const mongoDbUri = process.env.MONGODB || 'mongodb+srv://kalilin:5gbUx5xE6yWvCeNz@handpicks-test-oktuz.mongodb.net/test';
 
 // set Express port
 app.set('port', port);

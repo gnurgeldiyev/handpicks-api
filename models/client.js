@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const apiKeySalt = process.env.APIKEY_SALT || 'SUPERP@SSWORD!';
+const { apiKeySalt } = require('../config/variables');
 const clientSchema = mongoose.Schema({
 	private_name: {
 		type: String,
@@ -22,6 +22,7 @@ clientSchema.methods.generateApiKey = function() {
   return jwt.sign({ id: this._id }, apiKeySalt);
 }
 clientSchema.methods.verifyApiKey = function (apiKey) {
+  console.log(apiKeySalt);
   const decoded = jwt.verify(apiKey, apiKeySalt);
   return decoded;
 }

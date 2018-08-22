@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const tokenSalt = process.env.TOKEN_SALT || 'SUPERP@SSWORD!';
+const { tokenSalt } = require('../config/variables');
 const managerSchema = mongoose.Schema({
   username: {
     type: String,
