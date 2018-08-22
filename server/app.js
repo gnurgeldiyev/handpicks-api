@@ -22,7 +22,7 @@ app.set('port', port);
 
 // Setup MongoDB with mongoose
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoDbUri, { useNewUrlParser: true });
+mongoose.connect(mongoDbUri, { useNewUrlParser: true, autoIndex: false });
 mongoose.connection.on('error', (err) => {
   console.log(`MongoDB connection is failed → ${err.message}`); 
 });

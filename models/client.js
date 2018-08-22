@@ -18,7 +18,6 @@ const clientSchema = mongoose.Schema({
     default: null
 	},
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
-clientSchema.index({});
 clientSchema.methods.generateApiKey = function() {
   return jwt.sign({ id: this._id }, apiKeySalt);
 }
