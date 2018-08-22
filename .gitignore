@@ -15,7 +15,7 @@ logs/
 .vscode/
 
 # Configs
-config/
+config/*.json
 
 # .env
 *.env
