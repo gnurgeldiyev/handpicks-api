@@ -31,7 +31,11 @@ const postSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Topic'
   },
-  tags: [String]
+  tags: [String],
+  published: {
+    type: Date,
+    required: true,
+  }
 }, {
   timestamps: {
     createdAt: 'created',

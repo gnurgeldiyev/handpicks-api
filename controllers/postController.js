@@ -16,7 +16,7 @@ exports.getPostsByQuery = (req, res) => {
 	let dayAfter = new Date(date);
 	dayAfter.setDate(dayAfter.getDate() + 1);
 	Post.find({
-			created: {
+			published: {
 				'$gte': date,
 				'$lt': dayAfter
 			}
@@ -40,7 +40,8 @@ exports.getPostsByQuery = (req, res) => {
  */
 exports.getPostById = (req, res) => {
 	const postId = req.params.postId;
-	Post.findById(postId).populate('owner').populate('topic')
+	const today = new Date();
+	Post.findOne({ _id: postId, published: { '$lte': today }}).populate('owner').populate('topic')
 		.then((response) => {
 			if (!response) { 
 				return res.sendStatus(404); 
@@ -58,10 +59,12 @@ exports.getPostById = (req, res) => {
 exports.getTopicAllPosts = (req, res) => {
 	let date = req.query.date;
 	const topicId = req.params.topicId;
+	const today = new Date();
 	// all posts with certain topicId
 	if (!date) {
 		Post.find({
-				topic: topicId
+				topic: topicId,
+				published: { '$lte': today }
 			}).populate('owner').populate('topic')
 			.then((response) => {
 				if (!response.length) { 
@@ -77,7 +80,7 @@ exports.getTopicAllPosts = (req, res) => {
 				return res.status(500).json({ err: err.message });
 			});
 	} else { // all posts with certain topicId and queried created date
-		if (!isISO8601(date)) { 
+		if (!isISO8601(date) || (toDate(date) > today)) { 
 			return res.sendStatus(400); 
 		}
 		date = toDate(date);
@@ -85,7 +88,7 @@ exports.getTopicAllPosts = (req, res) => {
 		dayAfter.setDate(dayAfter.getDate() + 1);
 		Post.find({
 				topic: topicId,
-				created: {
+				published: {
 					'$gte': date,
 					'$lt': dayAfter
 				}
@@ -114,8 +117,9 @@ exports.addNewPost = async (req, res) => {
 		|| !isURL(newPost.url) 
 		|| !newPost.ownerId 
 		|| !newPost.topicId 
-		|| !isLength(newPost.summary, { min: 250, max: 500 }) 
-		|| !newPost.tags) {
+		|| !isLength(newPost.summary, { min: 250, max: 500 })
+		|| !newPost.tags.length
+		|| !newPost.published) {
 		return res.sendStatus(400);
 	}
 	let post = {};
@@ -130,7 +134,8 @@ exports.addNewPost = async (req, res) => {
 			summary: ltrim(newPost.summary),
 			owner: newPost.ownerId,
 			topic: newPost.topicId,
-			tags: newPost.tags
+			tags: newPost.tags,
+			published: newPost.published
 		});
 	} catch (err) {
 		return res.status(500).json({ err: err.message });
@@ -174,7 +179,8 @@ exports.updatePost = async (req, res) => {
 			$set: {
 				topic: post.topic ? post.topic : oldPost.topic,
 				summary: post.summary ? ltrim(post.summary) : oldPost.summary,
-				tags: post.tags ? post.tags : oldPost.tags
+				tags: post.tags ? post.tags : oldPost.tags,
+				published: post.published ? post.published : oldPost.published
 			}
 		}, { new: true })
 		.then((response) => {
