@@ -4,8 +4,8 @@ const { apiKeySalt } = require('../config/variables');
 const clientSchema = mongoose.Schema({
 	private_name: {
 		type: String,
-		required: true,
-		unique: true
+    required: true,
+    unique: true
   },
   public_name: {
 		type: String,
@@ -13,11 +13,12 @@ const clientSchema = mongoose.Schema({
 		unique: true
 	},
 	api_key: {
-		type: String,
+    type: String,
     unique: true,
     default: null
 	},
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
+clientSchema.index({});
 clientSchema.methods.generateApiKey = function() {
   return jwt.sign({ id: this._id }, apiKeySalt);
 }

@@ -47,6 +47,7 @@ const managerSchema = mongoose.Schema({
     updatedAt: 'updated'
   }
 });
+managerSchema.index({});
 managerSchema.methods.generateToken = function () {
   try {
     return jwt.sign({ id: this._id }, tokenSalt);

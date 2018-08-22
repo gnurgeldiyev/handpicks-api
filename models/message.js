@@ -13,6 +13,7 @@ const messageSchema = mongoose.Schema({
 		required: true
 	}
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
+messageSchema.index({});
 messageSchema.methods.messageToJson = function () {
 	return {
 		id: this._id,

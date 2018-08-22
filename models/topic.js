@@ -16,6 +16,7 @@ const topicSchema = mongoose.Schema({
 		required: true
 	}
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
+topicSchema.index({});
 topicSchema.methods.topicToJson = function () {
 	return {
 		id: this._id,
