@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
-const compression = require("compression");  
+const compression = require("compression");
 const helmet = require("helmet");
 const userRoutes = require('../routes/userRoutes');
 const topicRoutes = require('../routes/topicRoutes');
@@ -24,7 +24,7 @@ app.set('port', port);
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDbUri, { useNewUrlParser: true, autoIndex: false });
 mongoose.connection.on('error', (err) => {
-  console.log(`MongoDB connection is failed → ${err.message}`); 
+  console.log(`MongoDB connection is failed → ${err.message}`);
 });
 
 // log only 4xx and 5xx responses to console
@@ -41,9 +41,10 @@ app.use(morgan('common', {
 app.use(helmet());
 
 // CORS config
-app.use(cors({  
-  origin: '*',
+app.use(cors({
+  origin: true,
   optionsSuccessStatus: 200,
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
