@@ -156,9 +156,6 @@ exports.updateManager = async (req, res) => {
   if (!manager) {
     return res.sendStatus(400);
   }
-  if (manager.email && !isEmail(manager.email)) {
-    return res.sendStatus(422);
-  }
   if (manager.password && !isLength(manager.password, { min:6 })) {
     return res.sendStatus(422);
   }
@@ -168,8 +165,6 @@ exports.updateManager = async (req, res) => {
     });
   Manager.findOneAndUpdate(managerId, {
     $set: {
-      email: manager.email || oldManager.email,
-      username: manager.username || oldManager.username,
       name: manager.name || oldManager.name,
       lastname: manager.lastname || oldManager.lastname,
       role: manager.role || oldManager.role,
