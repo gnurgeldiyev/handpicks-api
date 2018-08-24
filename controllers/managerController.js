@@ -159,17 +159,21 @@ exports.updateManager = async (req, res) => {
   if (manager.password && !isLength(manager.password, { min:6 })) {
     return res.sendStatus(422);
   }
-  const oldManager = await Manager.findById(managerId)
-    .catch((err) => { 
-      return res.status(500).json({ err: err.message }) 
-    });
+  const updateManager = {};
+  if (manager.name) {
+    updateManager.name = manager.name;
+  }
+  if (manager.lastname) {
+    updateManager.lastname = manager.lastname;
+  }
+  if (manager.role) {
+    updateManager.role = manager.role;
+  }
+  if (manager.password) {
+    updateManager.password = hashPassword(manager.password);
+  }
   Manager.findOneAndUpdate(managerId, {
-    $set: {
-      name: manager.name || oldManager.name,
-      lastname: manager.lastname || oldManager.lastname,
-      role: manager.role || oldManager.role,
-      password: manager.password ? hashPassword(manager.password) : oldManager.password
-    }
+    $set: updateManager
   }, { new: true })
     .then((response) => {
       return res.status(200).json({ manager: response.profileToJson() });

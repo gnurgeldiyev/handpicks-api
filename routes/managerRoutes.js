@@ -62,6 +62,7 @@ router.post('/:managerId/clients',
 */
 router.put('/:managerId', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
   managerController.updateManager
 );
