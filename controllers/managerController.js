@@ -172,7 +172,7 @@ exports.updateManager = async (req, res) => {
   if (manager.password) {
     updateManager.password = hashPassword(manager.password);
   }
-  Manager.findOneAndUpdate(managerId, {
+  Manager.findByIdAndUpdate(managerId, {
     $set: updateManager
   }, { new: true })
     .then((response) => {
