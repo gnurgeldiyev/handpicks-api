@@ -165,22 +165,19 @@ exports.addNewPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
 	const postId = req.params.postId;
 	let post = req.body.post;
-	if (!post) {
+	if (!post 
+		|| !post.topicId 
+		|| !isLength(post.summary, { min: 250, max: 500 })
+		|| !post.tags.length
+		|| !post.published) {
 		return res.sendStatus(400);
 	}
-	if (post.summary && !isLength(post.summary, { min: 250, max: 500 })) {
-		return res.sendStatus(422);
-	}
-	const oldPost = await Post.findById(postId)
-		.catch((err) => {
-			return res.status(500).json({ err: err.message })
-		});
 	Post.findByIdAndUpdate(postId, {
 			$set: {
-				topic: post.topic ? post.topic : oldPost.topic,
-				summary: post.summary ? ltrim(post.summary) : oldPost.summary,
-				tags: post.tags ? post.tags : oldPost.tags,
-				published: post.published ? post.published : oldPost.published
+				topic: post.topic,
+				summary: ltrim(post.summary),
+				tags: post.tags,
+				published: post.published
 			}
 		}, { new: true })
 		.then((response) => {
