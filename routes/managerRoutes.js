@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const managerController = require('../controllers/managerController');
 const clientController = require('../controllers/clientController');
-const { isManagerExistsForParams, isAdminForParams, isClientExistsForParams } = require('../middlewares/commonChecks');
+const { isManagerExistsForParams, isAdmin, isClientExistsForParams } = require('../middlewares/commonChecks');
 const { isAuthenticatedManager } = require('../middlewares/auth');
 /**
  * GET requests
@@ -21,21 +21,21 @@ router.get('/:managerId',
 );
 router.get('/:managerId/clients', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   clientController.getAllClients
 );
 router.get('/:managerId/clients/:clientId', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   isClientExistsForParams,
   clientController.getClientById
 );
 router.get('/:managerId/clients/:clientId/keys', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   isClientExistsForParams,
   clientController.getClientKeys
 );
@@ -53,8 +53,8 @@ router.post('/logout',
 );
 router.post('/:managerId/clients', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   clientController.addNewClient
 );
 /**
@@ -67,8 +67,8 @@ router.put('/:managerId',
 );
 router.put('/:managerId/clients/:clientId', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   isClientExistsForParams,
   clientController.updateClient
 );
@@ -77,14 +77,14 @@ router.put('/:managerId/clients/:clientId',
 */
 router.delete('/:managerId', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   managerController.deleteManager
 );
 router.delete('/:managerId/clients/:clientId', 
   isAuthenticatedManager,
+  isAdmin,
   isManagerExistsForParams,
-  isAdminForParams,
   isClientExistsForParams,
   clientController.deleteClient
 );

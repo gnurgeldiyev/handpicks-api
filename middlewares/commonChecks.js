@@ -4,7 +4,7 @@ const { Post } = require('../models/post');
 const { Manager } = require('../models/manager');
 const { Client } = require('../models/client');
 const { Message } = require('../models/message');
-const { getClientConfig, unhashClientName } = require('../helpers/helper');
+const { getClientConfig, unhashClientName, getAuthToken } = require('../helpers/helper');
 /** 
  * checks client API Key
 */
@@ -134,14 +134,28 @@ exports.isManagerExistsForParams = (req, res, next) => {
 /** 
  * checks is manager role equal to admin
 */
-exports.isAdminForParams = (req, res, next) => {
-  const managerId = req.params.managerId;
-  Manager.findOne({ _id: managerId, role: 'admin' })
+exports.isAdmin = (req, res, next) => {
+  const token = getAuthToken(req.get('authorization'));
+  if (!token) {
+    return res.sendStatus(401);
+  }
+  Manager.findOne({ token })
     .then((response) => {
       if (!response) {
         return res.sendStatus(401);
       }
-      next();
+      const id = response.verifyToken().id;
+      Manager.findOne({ _id: id, role: 'admin' })
+        .then((response) => {
+          if (!response) {
+            return res.sendStatus(401);
+          }
+          next();
+        }) 
+        .catch((err) => {
+          console.log(`err: ${err} \nmessage: ${err.message}`);
+          return res.sendStatus(500);
+        });
     })
     .catch((err) => {
       console.log(`err: ${err} \nmessage: ${err.message}`);
