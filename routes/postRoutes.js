@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const postController = require('../controllers/postController');
-const { isTopicExistsForParams, isPostExistsForParams } = require('../middlewares/commonChecks');
+const { isTopicIdExistsForParams, isPostExistsForParams } = require('../middlewares/commonChecks');
 const { isAuthenticatedManager } = require('../middlewares/auth');
 /**
  * GET requests
@@ -11,8 +11,8 @@ router.get('/',
 router.get('/:postId', 
   postController.getPostById
 );
-router.get('/topics/:topicUrl', 
-  isTopicExistsForParams,
+router.get('/topics/:topicId', 
+  isTopicIdExistsForParams,
   postController.getTopicAllPosts
 );
 /**
