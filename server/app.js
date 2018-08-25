@@ -12,6 +12,7 @@ const topicRoutes = require('../routes/topicRoutes');
 const postRoutes = require('../routes/postRoutes');
 const managerRoutes = require('../routes/managerRoutes');
 const messageRoutes = require('../routes/messageRoutes');
+const clientRoutes = require('../routes/clientRoutes');
 const { isValidClient } = require('../middlewares/commonChecks');
 const { host, port, mongoDbUri } = require('../config/variables');
 
@@ -64,6 +65,7 @@ app.use('/api/v1/topics', topicRoutes);
 app.use('/api/v1/posts', postRoutes);
 app.use('/api/v1/managers', managerRoutes);
 app.use('/api/v1/messages', messageRoutes);
+app.use('/api/v1/clients', clientRoutes);
 
 // Listen the server
 app.listen(port, host);
