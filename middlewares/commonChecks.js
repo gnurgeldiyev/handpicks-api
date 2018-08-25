@@ -35,9 +35,6 @@ exports.isValidClient = (req, res, next) => {
 */
 exports.isUserExistsForParams = (req, res, next) => {
   const userId = req.params.userId;
-  if (!userId) {
-    return res.sendStatus(400);
-  }
   User.findById(userId)
     .then((response) => {
       if (!response) { 
@@ -54,11 +51,8 @@ exports.isUserExistsForParams = (req, res, next) => {
  * checks is topic exists for request params
 */
 exports.isTopicExistsForParams = (req, res, next) => {
-  const topicId = req.params.topicId;
-  if (!topicId) {
-    return res.sendStatus(400);
-  }
-  Topic.findById(topicId)
+  const topicUrl = req.params.topicUrl;
+  Topic.findOne({ url: topicUrl })
     .then((response) => {
       if (!response) { 
         return res.sendStatus(404);
@@ -75,9 +69,6 @@ exports.isTopicExistsForParams = (req, res, next) => {
 */
 exports.isTopicExistsForBody = (req, res, next) => {
   const topicId = req.body.link.topicId;
-  if (!topicId) {
-    return res.sendStatus(400);
-  }
 	Topic.findById(topicId)
     .then((response) => {
       if (!response) { 
@@ -95,9 +86,6 @@ exports.isTopicExistsForBody = (req, res, next) => {
 */
 exports.isPostExistsForParams = (req, res, next) => {
   const postId = req.params.postId;
-  if (!postId) {
-    return res.sendStatus(400);
-  }
   Post.findById(postId)
     .then((response) => {
       if (!response) { 
@@ -116,9 +104,6 @@ exports.isPostExistsForParams = (req, res, next) => {
 */
 exports.isManagerExistsForParams = (req, res, next) => {
   const managerId = req.params.managerId;
-  if (!managerId) {
-    return res.sendStatus(400);
-  }
   Manager.findById(managerId)
     .then((response) => {
       if (!response) { 
@@ -167,9 +152,6 @@ exports.isAdmin = (req, res, next) => {
 */
 exports.isClientExistsForParams = (req, res, next) => {
   const clientId = req.params.clientId;
-  if (!clientId) {
-    return res.sendStatus(400);
-  }
   Client.findById(clientId)
     .then((response) => {
       if (!response) { 
@@ -187,9 +169,6 @@ exports.isClientExistsForParams = (req, res, next) => {
 */
 exports.isMessageExistsForParams = (req, res, next) => {
   const messageId = req.params.messageId;
-  if (!messageId) {
-    return res.sendStatus(400);
-  }
   Message.findById(messageId)
     .then((response) => {
       if (!response) { 
