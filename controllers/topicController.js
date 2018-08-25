@@ -20,11 +20,11 @@ exports.getAllTopics = (req, res) => {
     });
 }
 /**
- * GET | get topic by id
+ * GET | get topic by URL
 */
-exports.getTopicById = (req, res) => {
-  const topicId = req.params.topicId;
-  Topic.findById(topicId)
+exports.getTopicByUrl = (req, res) => {
+  const topicUrl = req.params.topicUrl;
+  Topic.findOne({ url: topicUrl })
     .then((response) => {
       return res.status(200).json({ topic: response.topicToJson() });
     })

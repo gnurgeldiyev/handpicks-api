@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const topicController = require('../controllers/topicController');
-const { isTopicExistsForParams } = require('../middlewares/commonChecks');
+const { isTopicUrlExistsForParams, isTopicIdExistsForParams } = require('../middlewares/commonChecks');
 const { isAuthenticatedManager } = require('../middlewares/auth');
 /**
  * GET requests
@@ -8,9 +8,9 @@ const { isAuthenticatedManager } = require('../middlewares/auth');
 router.get('/', 
   topicController.getAllTopics
 );
-router.get('/:topicId',
-  isTopicExistsForParams,
-  topicController.getTopicById
+router.get('/:topicUrl',
+  isTopicUrlExistsForParams,
+  topicController.getTopicByUrl
 );
 /**
  * POST requests
@@ -24,7 +24,7 @@ router.post('/',
 */
 router.put('/:topicId',
   isAuthenticatedManager,
-  isTopicExistsForParams,
+  isTopicIdExistsForParams,
   topicController.updateTopic
 );
 /**
@@ -32,7 +32,7 @@ router.put('/:topicId',
 */
 router.delete('/:topicId', 
   isAuthenticatedManager,
-  isTopicExistsForParams,
+  isTopicIdExistsForParams,
   topicController.deleteTopic
 );
 module.exports = router;
