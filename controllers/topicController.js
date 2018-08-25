@@ -41,7 +41,7 @@ exports.addNewTopic = (req, res) => {
   if (!newTopic
     || !newTopic.title
     || !newTopic.description
-    || !isLength(newTopic.description, { min: 1, max: 100 })) {
+    || !isLength(newTopic.description, { min: 1, max: 128 })) {
     return res.sendStatus(400);
   }
   const topic = new Topic({
