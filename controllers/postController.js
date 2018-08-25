@@ -1,4 +1,5 @@
 const { Post } = require('../models/post');
+const { Topic } = require('../models/topic');
 const { isISO8601, toDate, isURL, isLength, ltrim } = require('validator');
 const {	getHostname, getMetadata } = require('../helpers/helper');
 const {	postToJson } = require('../helpers/jsonMethods');
@@ -58,12 +59,13 @@ exports.getPostById = (req, res) => {
  */
 exports.getTopicAllPosts = async (req, res) => {
 	let date = req.query.date;
-	const topicId = req.params.topicId;
+	const topicUrl = req.params.topicUrl;
+	const topic = await Topic.findOne({ url: topicUrl }).catch((err) => { return res.status(500).json({ err: err.message }) })
 	const today = new Date();
 	// all posts with certain topicId
 	if (!date) {
 		Post.find({
-				topic: topicId,
+				topic: topic._id,
 				published: { '$lte': today }
 			}).populate('owner').populate('topic')
 			.then((response) => {
@@ -87,7 +89,7 @@ exports.getTopicAllPosts = async (req, res) => {
 		let dayAfter = new Date(date);
 		dayAfter.setDate(dayAfter.getDate() + 1);
 		Post.find({
-				topic: topicId,
+				topic: topic._id,
 				published: {
 					'$gte': date,
 					'$lt': dayAfter
