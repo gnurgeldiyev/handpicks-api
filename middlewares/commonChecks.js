@@ -48,9 +48,26 @@ exports.isUserExistsForParams = (req, res, next) => {
     });
 }
 /** 
- * checks is topic exists for request params
+ * checks is topic exists for request params with topic ID
 */
-exports.isTopicExistsForParams = (req, res, next) => {
+exports.isTopicIdExistsForParams = (req, res, next) => {
+  const topicId = req.params.topicId;
+  Topic.findById(topicId)
+    .then((response) => {
+      if (!response) { 
+        return res.sendStatus(404);
+      }
+      next();
+    })
+    .catch((err) => {
+      console.log(`err: ${err} \nmessage: ${err.message}`);
+      return res.sendStatus(500);
+    });
+}
+/** 
+ * checks is topic exists for request params with topic URl
+*/
+exports.isTopicUrlExistsForParams = (req, res, next) => {
   const topicUrl = req.params.topicUrl;
   Topic.findOne({ url: topicUrl })
     .then((response) => {
