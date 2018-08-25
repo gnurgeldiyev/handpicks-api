@@ -11,7 +11,7 @@ router.get('/',
 router.get('/:postId', 
   postController.getPostById
 );
-router.get('/topics/:topicId', 
+router.get('/topics/:topicUrl', 
   isTopicExistsForParams,
   postController.getTopicAllPosts
 );
