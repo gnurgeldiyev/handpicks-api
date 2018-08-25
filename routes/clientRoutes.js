@@ -16,7 +16,7 @@ router.get('/:clientId',
   isClientExistsForParams,
   clientController.getClientById
 );
-router.get('/clients/:clientId/keys', 
+router.get('/:clientId/keys', 
   isAuthenticatedManager,
   isAdmin,
   isClientExistsForParams,
