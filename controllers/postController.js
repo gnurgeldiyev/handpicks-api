@@ -44,7 +44,6 @@ exports.getPostsByQuery = async (req, res) => {
 		let postDate = new Date(post.published);
 		let dayAfter = new Date(postDate);
 		dayAfter.setDate(dayAfter.getDate() + 1);
-		console.log(postDate, dayAfter);
 		Post.find({
 			published: {
 				'$gte': postDate,
@@ -150,7 +149,6 @@ exports.getTopicLatestPosts = async (req, res) => {
 	const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
 	let postDate = new Date(post.published);
 	let dayAfter = new Date(postDate);
-	dayAfter.setDate(dayAfter.getDate() + 1);
 	dayAfter.setDate(dayAfter.getDate() + 1);
 	Post.find({
 		topic: topic._id,
