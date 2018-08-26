@@ -13,7 +13,7 @@ exports.getHostname = (url) => {
   let hostname;
   try {
     //find & remove protocol (http, ftp, etc.) and get hostname
-    if (url.indexOf("://") > -1) {
+    if (url.indexOf("://") > -1 || url.indexOf("://www.") > -1) {
       hostname = url.split('/')[2];
     } else {
       hostname = url.split('/')[0];
