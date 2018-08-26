@@ -7,21 +7,50 @@ const {	postToJson } = require('../helpers/jsonMethods');
  * GET | get posts by query 
  * query date
  */
-exports.getPostsByQuery = (req, res) => {
+exports.getPostsByQuery = async (req, res) => {
 	let date = req.query.date;
-	if (!date 
-		|| !isISO8601(date)) { 
+	if (!date || !(isISO8601(date) || date === 'latest')) { 
 		return res.sendStatus(400); 
 	}
-	date = toDate(date);
-	let dayAfter = new Date(date);
-	dayAfter.setDate(dayAfter.getDate() + 1);
-	Post.find({
+	// if query date
+	if (isISO8601(date)) {
+		date = toDate(date);
+		let dayAfter = new Date(date);
+		dayAfter.setDate(dayAfter.getDate() + 1);
+		Post.find({
+				published: {
+					'$gte': date,
+					'$lt': dayAfter
+				}
+			}).populate('owner').populate('topic')
+			.then((response) => {
+				if (!response.length) { 
+					return res.sendStatus(404); 
+				}
+				let posts = [];
+				response.forEach((post) => {
+					posts.push(postToJson(post));
+				});
+				return res.status(200).json({ posts });
+			})
+			.catch((err) => {
+				return res.status(500).json({ err: err.message });
+			});
+	}
+	// if query for latest
+	if (date === 'latest') {
+		const today = new Date();
+		const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
+		let postDate = new Date(post.published);
+		let dayAfter = new Date(postDate);
+		dayAfter.setDate(dayAfter.getDate() + 1);
+		console.log(postDate, dayAfter);
+		Post.find({
 			published: {
-				'$gte': date,
+				'$gte': postDate,
 				'$lt': dayAfter
 			}
-		}).populate('owner').populate('topic')
+		}).populate('owner').populate('topic').sort({ published: -1 })
 		.then((response) => {
 			if (!response.length) { 
 				return res.sendStatus(404); 
@@ -35,6 +64,7 @@ exports.getPostsByQuery = (req, res) => {
 		.catch((err) => {
 			return res.status(500).json({ err: err.message });
 		});
+	}
 }
 /**
  * GET | get post by postId
@@ -67,7 +97,7 @@ exports.getTopicAllPosts = async (req, res) => {
 		Post.find({
 				topic: topic._id,
 				published: { '$lte': today }
-			}).populate('owner').populate('topic')
+			}).populate('owner').populate('topic').sort({ published: -1 })
 			.then((response) => {
 				if (!response.length) { 
 					return res.sendStatus(404); 
@@ -118,15 +148,17 @@ exports.getTopicLatestPosts = async (req, res) => {
 	const today = new Date();
 	const topic = await Topic.findOne({ url: topicUrl }).catch((err) => { return res.status(500).json({ err: err.message }) })
 	const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
-	let dayAfter = new Date(post.published);
+	let postDate = new Date(post.published);
+	let dayAfter = new Date(postDate);
+	dayAfter.setDate(dayAfter.getDate() + 1);
 	dayAfter.setDate(dayAfter.getDate() + 1);
 	Post.find({
 		topic: topic._id,
 		published: {
-			'$gte': post.published,
+			'$gte': postDate,
 			'$lt': dayAfter
 		}
-	}).populate('owner').populate('topic')
+	}).populate('owner').populate('topic').sort({ published: -1 })
 	.then((response) => {
 		if (!response.length) { 
 			return res.sendStatus(404); 
