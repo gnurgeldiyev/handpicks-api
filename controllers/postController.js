@@ -40,7 +40,7 @@ exports.getPostsByQuery = async (req, res) => {
 	// if query for latest
 	if (date === 'latest') {
 		const today = new Date();
-		const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
+		const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: -1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
 		let postDate = new Date(post.published);
 		let dayAfter = new Date(postDate);
 		dayAfter.setDate(dayAfter.getDate() + 1);
@@ -146,7 +146,7 @@ exports.getTopicLatestPosts = async (req, res) => {
 	const topicUrl = req.params.topicUrl;
 	const today = new Date();
 	const topic = await Topic.findOne({ url: topicUrl }).catch((err) => { return res.status(500).json({ err: err.message }) })
-	const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
+	const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: -1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
 	let postDate = new Date(post.published);
 	let dayAfter = new Date(postDate);
 	dayAfter.setDate(dayAfter.getDate() + 1);
