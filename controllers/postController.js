@@ -111,6 +111,37 @@ exports.getTopicAllPosts = async (req, res) => {
 	}
 }
 /**
+ * GET | get topic latest posts
+*/
+exports.getTopicLatestPosts = async (req, res) => {
+	const topicUrl = req.params.topicUrl;
+	const today = new Date();
+	const topic = await Topic.findOne({ url: topicUrl }).catch((err) => { return res.status(500).json({ err: err.message }) })
+	const post = await Post.findOne({ published: { '$lte': today }}).sort({ published: 1 }).catch((err) => { return res.status(500).json({ err: err.message }) })
+	let dayAfter = new Date(post.published);
+	dayAfter.setDate(dayAfter.getDate() + 1);
+	Post.find({
+		topic: topic._id,
+		published: {
+			'$gte': post.published,
+			'$lt': dayAfter
+		}
+	}).populate('owner').populate('topic')
+	.then((response) => {
+		if (!response.length) { 
+			return res.sendStatus(404); 
+		}
+		let posts = [];
+		response.forEach((post) => {
+			posts.push(postToJson(post));
+		});
+		return res.status(200).json({ posts });
+	})
+	.catch((err) => {
+		return res.status(500).json({ err: err.message });
+	});
+}
+/**
  * GET | get topic upcoming posts
 */
 exports.getTopicUpcomingPosts = async (req, res) => {
