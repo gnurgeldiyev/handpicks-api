@@ -15,6 +15,10 @@ router.get('/topics/:topicUrl',
   isTopicUrlExistsForParams,
   postController.getTopicAllPosts
 );
+router.get('/topics/:topicUrl/upcoming',
+  isTopicUrlExistsForParams,
+  postController.getTopicUpcomingPosts
+);
 /**
  * POST requests
 */

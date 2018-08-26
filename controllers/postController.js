@@ -56,7 +56,7 @@ exports.getPostById = (req, res) => {
 }
 /**
  * GET | get topic all posts or get topic posts by query date
- */
+*/
 exports.getTopicAllPosts = async (req, res) => {
 	let date = req.query.date;
 	const topicUrl = req.params.topicUrl;
@@ -109,6 +109,31 @@ exports.getTopicAllPosts = async (req, res) => {
 				return res.status(500).json({ err: err.message });
 			});
 	}
+}
+/**
+ * GET | get topic upcoming posts
+*/
+exports.getTopicUpcomingPosts = async (req, res) => {
+	const topicUrl = req.params.topicUrl;
+	const topic = await Topic.findOne({ url: topicUrl }).catch((err) => { return res.status(500).json({ err: err.message }) })
+	const today = new Date();
+	Post.find({
+		topic: topic._id,
+		published: { '$gt': today }
+	}).populate('owner').populate('topic').sort({ published: 1 })
+	.then((response) => {
+		if (!response.length) { 
+			return res.sendStatus(404); 
+		}
+		let posts = [];
+		response.forEach((post) => {
+			posts.push(postToJson(post));
+		});
+		return res.status(200).json({ posts });
+	})
+	.catch((err) => {
+		return res.status(500).json({ err: err.message });
+	});
 }
 /**
  * POST | add a new post
@@ -176,7 +201,7 @@ exports.updatePost = async (req, res) => {
 	}
 	Post.findByIdAndUpdate(postId, {
 			$set: {
-				topic: post.topic,
+				topic: post.topicId,
 				summary: ltrim(post.summary),
 				tags: post.tags,
 				published: post.published
