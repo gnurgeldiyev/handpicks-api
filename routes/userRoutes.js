@@ -37,6 +37,11 @@ router.get('/:userId/topics/:topicId',
   isTopicIdExistsForParams,
   userController.topicFollowUnfollow  
 );
+router.get('/:userId/topics',
+  isAuthenticatedUser,
+  isUserExistsForParams,
+  userController.getUserFollowedTopics
+);
 router.get('/:userId/posts',
   isAuthenticatedUser,
   isUserExistsForParams,

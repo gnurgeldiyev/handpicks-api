@@ -101,6 +101,26 @@ exports.topicFollowUnfollow = (req, res) => {
     });
 }
 /**
+ * GET | get user followed topics
+*/
+exports.getUserFollowedTopics = (req, res) => {
+  const userId = req.params.userId;
+  TopicFollow.find({ follower: userId }).populate('followee')
+    .then((response) => {
+      if (!response.length) {
+        return res.sendStatus(404); 
+      } 
+      let topicFollows = [];
+      response.forEach((item) => {
+        topicFollows.push(topicFollowToJson(item));
+      })
+      return res.status(200).json({ topicFollows });
+    })
+    .catch((err) => {
+      return res.status(500).json({ err: err.message });
+    });
+}
+/**
  * GET | user posts based on followed topics
 */
 exports.getUserPosts = async (req, res) => {
