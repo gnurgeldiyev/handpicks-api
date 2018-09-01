@@ -247,6 +247,7 @@ exports.updateUser = async (req, res) => {
         name: user.name || oldUser.name,
         lastname: user.lastname || oldUser.lastname,
         avatar: user.avatar || oldUser.avatar,
+        token: user.token || oldUser.token
       }
     }, { new: true })
     .then((response) => {
