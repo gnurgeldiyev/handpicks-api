@@ -5,6 +5,7 @@ const { Manager } = require('../models/manager');
 const { Client } = require('../models/client');
 const { Message } = require('../models/message');
 const { getClientConfig, unhashClientName, getAuthToken } = require('../helpers/helper');
+const { isMongoId } = require('validator');
 /** 
  * checks client API Key
 */
@@ -35,6 +36,9 @@ exports.isValidClient = (req, res, next) => {
 */
 exports.isUserExistsForParams = (req, res, next) => {
   const userId = req.params.userId;
+  if (!isMongoId(userId)) {
+		return res.sendStatus(400);
+	}
   User.findById(userId)
     .then((response) => {
       if (!response) { 
@@ -52,6 +56,9 @@ exports.isUserExistsForParams = (req, res, next) => {
 */
 exports.isTopicIdExistsForParams = (req, res, next) => {
   const topicId = req.params.topicId;
+  if (!isMongoId(topicId)) {
+		return res.sendStatus(400);
+	}
   Topic.findOne({ _id: topicId, deleted: false })
     .then((response) => {
       if (!response) { 
@@ -86,6 +93,9 @@ exports.isTopicUrlExistsForParams = (req, res, next) => {
 */
 exports.isTopicExistsForBody = (req, res, next) => {
   const topicId = req.body.link.topicId;
+  if (!isMongoId(topicId)) {
+		return res.sendStatus(400);
+	}
 	Topic.findOne({ _id: topicId, deleted: false })
     .then((response) => {
       if (!response) { 
@@ -103,6 +113,9 @@ exports.isTopicExistsForBody = (req, res, next) => {
 */
 exports.isPostExistsForParams = (req, res, next) => {
   const postId = req.params.postId;
+  if (!isMongoId(postId)) {
+		return res.sendStatus(400);
+	}
   Post.findById(postId)
     .then((response) => {
       if (!response) { 
@@ -121,6 +134,9 @@ exports.isPostExistsForParams = (req, res, next) => {
 */
 exports.isManagerExistsForParams = (req, res, next) => {
   const managerId = req.params.managerId;
+  if (!isMongoId(managerId)) {
+		return res.sendStatus(400);
+	}
   Manager.findOne({ _id: managerId, deleted: false })
     .then((response) => {
       if (!response) { 
@@ -169,6 +185,9 @@ exports.isAdmin = (req, res, next) => {
 */
 exports.isClientExistsForParams = (req, res, next) => {
   const clientId = req.params.clientId;
+  if (!isMongoId(clientId)) {
+		return res.sendStatus(400);
+	}
   Client.findById(clientId)
     .then((response) => {
       if (!response) { 
@@ -186,6 +205,9 @@ exports.isClientExistsForParams = (req, res, next) => {
 */
 exports.isMessageExistsForParams = (req, res, next) => {
   const messageId = req.params.messageId;
+  if (!isMongoId(messageId)) {
+		return res.sendStatus(400);
+	}
   Message.findById(messageId)
     .then((response) => {
       if (!response) { 
