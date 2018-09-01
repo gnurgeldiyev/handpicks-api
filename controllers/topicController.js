@@ -6,8 +6,8 @@ const { isLength, ltrim } = require('validator');
 exports.getAllTopics = (req, res) => {
 	Topic.find()
     .then((response) => {
-      if (!response.length) { 
-        return res.sendStatus(404); 
+      if (!response.length) {
+        return res.sendStatus(404);
       }
       let topics = [];
       response.forEach((topic) => {
@@ -69,19 +69,19 @@ exports.updateTopic = (req, res) => {
     || !isLength(topic.description, { min: 1, max: 100 })) {
     return res.sendStatus(400);
   }
-  Topic.findByIdAndUpdate(topicId, { 
-		$set: { 
-			title: ltrim(topic.title), 
-			url: ltrim(topic.title.toLowerCase().replace(' ', '-')),
-			description: ltrim(topic.description)
-		}
-	}, {new: true})
-  .then((response) => {
-    return res.status(200).json({ topic: response.topicToJson() });
-  })
-  .catch((err) => {
-    return res.status(500).json({ err: err.message });
-  });
+  Topic.findByIdAndUpdate(topicId, {
+      $set: {
+        title: ltrim(topic.title),
+        url: ltrim(topic.title.toLowerCase().replace(' ', '-')),
+        description: ltrim(topic.description)
+      }
+    }, { new: true })
+    .then((response) => {
+      return res.status(200).json({ topic: response.topicToJson() });
+    })
+    .catch((err) => {
+      return res.status(500).json({ err: err.message });
+    });
 }
 /**
  * DELETE | delete topic by id
