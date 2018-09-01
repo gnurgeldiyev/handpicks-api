@@ -9,6 +9,7 @@ router.get('/',
   postController.getPostsByQuery
 );
 router.get('/:postId', 
+  isPostExistsForParams,
   postController.getPostById
 );
 router.get('/topics/:topicUrl', 
