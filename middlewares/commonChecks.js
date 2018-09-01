@@ -52,7 +52,7 @@ exports.isUserExistsForParams = (req, res, next) => {
 */
 exports.isTopicIdExistsForParams = (req, res, next) => {
   const topicId = req.params.topicId;
-  Topic.findById(topicId)
+  Topic.findOne({ _id: topicId, deleted: false })
     .then((response) => {
       if (!response) { 
         return res.sendStatus(404);
@@ -69,7 +69,7 @@ exports.isTopicIdExistsForParams = (req, res, next) => {
 */
 exports.isTopicUrlExistsForParams = (req, res, next) => {
   const topicUrl = req.params.topicUrl;
-  Topic.findOne({ url: topicUrl })
+  Topic.findOne({ url: topicUrl, deleted: false })
     .then((response) => {
       if (!response) { 
         return res.sendStatus(404);
@@ -86,7 +86,7 @@ exports.isTopicUrlExistsForParams = (req, res, next) => {
 */
 exports.isTopicExistsForBody = (req, res, next) => {
   const topicId = req.body.link.topicId;
-	Topic.findById(topicId)
+	Topic.findOne({ _id: topicId, deleted: false })
     .then((response) => {
       if (!response) { 
         return res.sendStatus(404);
@@ -121,7 +121,7 @@ exports.isPostExistsForParams = (req, res, next) => {
 */
 exports.isManagerExistsForParams = (req, res, next) => {
   const managerId = req.params.managerId;
-  Manager.findById(managerId)
+  Manager.findOne({ _id: managerId, deleted: false })
     .then((response) => {
       if (!response) { 
         return res.sendStatus(404);
