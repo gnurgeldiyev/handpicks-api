@@ -40,6 +40,10 @@ const managerSchema = mongoose.Schema({
   token: {
     type: String,
     default: null
+  },
+  deleted: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: {

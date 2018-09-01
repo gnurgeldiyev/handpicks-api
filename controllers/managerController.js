@@ -5,26 +5,47 @@ const { isEmail, isLength } = require('validator');
  * GET | get all managers
 */
 exports.getAllManagers = (req, res) => {
-  Manager.find().sort({ role: 1 })
-    .then((response) => {
-      if (!response.length) {
-        return res.sendStatus(404);
-      }
-      let managers = [];
-      response.forEach((manager) => {
-        managers.push(manager.profileToJson());
+  const deleted = req.query.deleted;
+  if (!deleted) {
+    Manager.find({ deleted: false }).sort({ role: 1 })
+      .then((response) => {
+        if (!response.length) {
+          return res.sendStatus(404);
+        }
+        let managers = [];
+        response.forEach((manager) => {
+          managers.push(manager.profileToJson());
+        });
+        return res.status(200).json({ managers });
+      })
+      .catch((err) => {
+        return res.status(500).json({ err: err.message });
       });
-      return res.status(200).json({ managers });
-    })
-    .catch((err) => {
-      return res.status(500).json({ err: err.message });
-    });
+    } else {
+      if (deleted !== 'true') {
+        return res.sendStatus(400);
+      }
+      Manager.find({ deleted: true }).sort({ role: 1 })
+        .then((response) => {
+          if (!response.length) {
+            return res.sendStatus(404);
+          }
+          let managers = [];
+          response.forEach((manager) => {
+            managers.push(manager.profileToJson());
+          });
+          return res.status(200).json({ managers });
+        })
+        .catch((err) => {
+          return res.status(500).json({ err: err.message });
+        });
+    }
 }
 /** 
  * GET | get only editors
 */
 exports.getAllEditors = (req, res) => {
-  Manager.find({ role: 'editor' })
+  Manager.find({ role: 'editor', deleted: false })
     .then((response) => {
       if (!response.length) {
         return res.sendStatus(404);
@@ -94,7 +115,8 @@ exports.login = (req, res) => {
     return res.sendStatus(400);
   }
   Manager.findOne({ 
-    email: manager.email
+    email: manager.email,
+    deleted: false
   })
     .then((response) => {
       if (!response) {
@@ -187,7 +209,11 @@ exports.updateManager = async (req, res) => {
 */
 exports.deleteManager = (req, res) => {
   const managerId = req.params.managerId;
-  Manager.findByIdAndRemove(managerId)
+  Manager.findByIdAndUpdate(managerId, {
+      $set: {
+        deleted: true
+      }
+    })
     .then(() => {
       return res.sendStatus(204);
     }) 
