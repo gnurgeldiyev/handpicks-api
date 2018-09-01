@@ -14,7 +14,11 @@ const topicSchema = mongoose.Schema({
 	description: {
 		type: String,
 		required: true
-	}
+	},
+	deleted: {
+    type: Boolean,
+    default: false
+  }
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
 topicSchema.methods.topicToJson = function () {
 	return {

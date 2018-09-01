@@ -4,20 +4,41 @@ const { isLength, ltrim } = require('validator');
  * GET | get all topics
 */
 exports.getAllTopics = (req, res) => {
-	Topic.find()
-    .then((response) => {
-      if (!response.length) {
-        return res.sendStatus(404);
-      }
-      let topics = [];
-      response.forEach((topic) => {
-        topics.push(topic.topicToJson());
+  const deleted = req.query.deleted;
+  if (!deleted) {
+    Topic.find({ deleted: false }).sort({ title: 1 })
+      .then((response) => {
+        if (!response.length) {
+          return res.sendStatus(404);
+        }
+        let topics = [];
+        response.forEach((topic) => {
+          topics.push(topic.topicToJson());
+        })
+        return res.status(200).json({ topics });
       })
-      return res.status(200).json({ topics });
-    })
-    .catch((err) => {
-      return res.status(500).json({ err: err.message });
-    });
+      .catch((err) => {
+        return res.status(500).json({ err: err.message });
+      });
+  } else {
+    if (deleted !== 'true') {
+      return res.sendStatus(400);
+    }
+    Topic.find({ deleted: true }).sort({ title: 1 })
+      .then((response) => {
+        if (!response.length) {
+          return res.sendStatus(404);
+        }
+        let topics = [];
+        response.forEach((topic) => {
+          topics.push(topic.topicToJson());
+        })
+        return res.status(200).json({ topics });
+      })
+      .catch((err) => {
+        return res.status(500).json({ err: err.message });
+      });
+  }
 }
 /**
  * GET | get topic by URL
@@ -32,7 +53,6 @@ exports.getTopicByUrl = (req, res) => {
       return res.status(500).json({ err: err.message });
     });
 }
-
 /**
  * POST | add a new topic
 */
@@ -56,7 +76,6 @@ exports.addNewTopic = (req, res) => {
       return res.status(500).json({ err: err.message });
     });
 }
-
 /**
  * PUT | update topic by id
 */
@@ -88,7 +107,11 @@ exports.updateTopic = (req, res) => {
 */
 exports.deleteTopic = (req, res) => {
 	const topicId = req.params.topicId;
-  Topic.findByIdAndRemove(topicId)
+  Topic.findByIdAndUpdate(topicId, {
+    $set: {
+      deleted: true
+    }
+  })
   .then(() => {
     return res.sendStatus(204);
   })
